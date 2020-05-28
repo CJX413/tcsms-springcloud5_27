@@ -73,7 +73,7 @@ public class OtherMonitor extends TcsmsMonitor {
                 Thread.sleep(SLEEP_TIME);
             }
         } catch (InterruptedException e) {
-            sendException(ExceptionInfo.OTHER_MONITOR_STOP, getData());
+            sendException(ExceptionInfo.OTHER_MONITOR_STOP, null);
         } finally {
             jedis.close();
         }

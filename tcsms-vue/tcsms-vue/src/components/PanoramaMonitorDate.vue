@@ -4,7 +4,7 @@
       <span>{{allOperationLogDate.time}}</span>
     </el-row>
     <el-row>
-      <baidu-map class="map" :center="{lng: innerDeviceList[0].longitude, lat: innerDeviceList[0].latitude}"
+      <baidu-map class="map" :center="center"
                  :zoom="zoom"
                  :scroll-wheel-zoom="true"
                  style="height: 600px">
@@ -70,6 +70,11 @@
     props: ['deviceList'],
     data() {
       return {
+        time: '',
+        center: {
+          lat: null,
+          lng: null,
+        },
         buildingList: [],
         point: {url: require('../../static/img/point.png'), size: {width: 12, height: 12}},
         R: 6371e3,
@@ -93,6 +98,7 @@
       },
     },
     watch: {
+      //初始化deviceMap
       deviceList: function (newVal, oldVal) {
         this.innerDeviceList = newVal;
         let deviceMap = new Map();
@@ -135,6 +141,12 @@
             if (response.data.success === true) {
               this.buildingList = response.data.result;
               console.log(this.buildingList)
+            }
+          });
+        this.axios.post('/center', {})
+          .then((response) => {
+            if (response.data.success === true) {
+              this.center = response.data.result;
             }
           });
       },

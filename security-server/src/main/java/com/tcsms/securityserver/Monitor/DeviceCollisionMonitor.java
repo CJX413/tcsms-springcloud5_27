@@ -154,7 +154,7 @@ public class DeviceCollisionMonitor extends TcsmsMonitor {
                 Thread.sleep(SLEEP_TIME);
             }
         } catch (InterruptedException e) {
-            sendException(ExceptionInfo.DEVICE_COLLISION_MONITOR_STOP, getData());
+            sendException(ExceptionInfo.DEVICE_COLLISION_MONITOR_STOP, null);
         } finally {
             jedis.close();
         }

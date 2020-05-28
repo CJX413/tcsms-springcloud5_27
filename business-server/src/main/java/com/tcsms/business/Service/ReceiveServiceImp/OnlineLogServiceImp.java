@@ -10,33 +10,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OnlineLogServiceImp {
     @Autowired
-    private OnlineLogDao runningLogDao;
+    private OnlineLogDao onlineLogDao;
     @Autowired
     private DeviceRegistryDao deviceRegistryDao;
 
     public OnlineLogDao getDao() {
-        return runningLogDao;
+        return onlineLogDao;
     }
 
-    public JsonArray queryAllLatestVersionRunningLog() throws Exception {
-        List<DeviceRegistry> list = deviceRegistryDao.findByIsRegistered(true);
+    public JsonArray onlineLog() throws Exception {
+        List<OnlineLog> list = onlineLogDao.findAllLatestVersion();
         JsonArray jsonArray = new JsonArray();
-        for (DeviceRegistry device : list) {
-            OnlineLog onlineLog = runningLogDao.findByLatestVersionAndDeviceId(device.getDeviceId());
-            if (onlineLog != null) {
-                jsonArray.add(formToJson(device, onlineLog));
-            }
+        for (OnlineLog onlineLog : list) {
+            DeviceRegistry device = deviceRegistryDao.findById(onlineLog.getDeviceId()).orElse(new DeviceRegistry());
+            jsonArray.add(formToJson(device, onlineLog));
         }
         return jsonArray;
     }
 
+    public boolean isOnline(String deviceId) {
+        OnlineLog onlineLog = onlineLogDao.findByLatestVersionAndDeviceId(deviceId);
+        if (onlineLog == null) {
+            return false;
+        }
+        if (onlineLog.getEndTime() == null) {
+            return true;
+        }
+        return false;
+    }
+
     private JsonObject formToJson(DeviceRegistry device, OnlineLog onlineLog) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("deviceId", device.getDeviceId());
+        jsonObject.addProperty("deviceId", onlineLog.getDeviceId());
         jsonObject.addProperty("deviceModel", device.getDeviceModel());
         if (onlineLog.getEndTime() == null || "".equals(onlineLog.getEndTime())) {
             jsonObject.addProperty("startTime", onlineLog.getStartTime());

@@ -20,7 +20,7 @@ public class OnlineLogController {
     public String runningLog() {
         JsonArray data;
         try {
-            data = runningLogServiceImp.queryAllLatestVersionRunningLog();
+            data = runningLogServiceImp.onlineLog();
         } catch (Exception e) {
             e.printStackTrace();
             return new ResultJSON(200, false, JsonHelper.replaceIllegalChar(e.getMessage()), null).toString();

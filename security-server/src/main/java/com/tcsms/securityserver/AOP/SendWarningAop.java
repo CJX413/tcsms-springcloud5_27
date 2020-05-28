@@ -39,6 +39,7 @@ public class SendWarningAop {
         Object[] args = point.getArgs();
         WarningLog warningLog = (WarningLog) args[0];
         if (!warningSet.contains(warningLog.hashCode())) {
+//        if (true) {
             log.info("还未发送过");
             warningSet.add(warningLog.hashCode());
             warningLogServiceImp.save(warningLog);

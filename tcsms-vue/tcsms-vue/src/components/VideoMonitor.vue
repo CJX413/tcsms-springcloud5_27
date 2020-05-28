@@ -152,10 +152,10 @@
         this.axios.post('/registeredDeviceInfo', {})
           .then((response) => {
             if (response.data.success === true) {
-              let data = response.data.result;
-              this.deviceList = data;
-              this.device = data[0];
-              this.openOperationLog(this.device);
+              this.deviceList = response.data.result;
+              // this.deviceList = data;
+              // this.device = data[0];
+              // this.openOperationLog(this.device);
             }
           });
       },
@@ -182,7 +182,7 @@
               dangerouslyUseHTMLString: true,
               type: 'error',
               message: '<strong>获取该设备当前的运行信息失败！<br/>报错信息：'
-                + this.utils.restoreIllegalChar(data.message) + '</strong>'
+                + this.utils.restoreIllegalChar(response.data.message) + '</strong>'
             });
           }
         });

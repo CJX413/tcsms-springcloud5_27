@@ -167,8 +167,8 @@
           </bm-marker>
           <bm-polyline :path="[device.point,path]" stroke-color="blue"
                        :stroke-opacity="0.5" :stroke-weight="2">
-            <bm-marker :icon="pointImg" :position="radiusPoint"></bm-marker>
           </bm-polyline>
+          <bm-marker :icon="pointImg" :position="radiusPoint"></bm-marker>
 
           <!--建筑物的map-->
           <div v-for="building of buildingList">
@@ -305,8 +305,8 @@
         interval: null,
         pointImg: {url: require('../../static/img/point.png'), size: {width: 12, height: 12}},
         center: {
-          lng: 116.481231,
-          lat: 39.920597,
+          lng: null,
+          lat: null,
         },
         buildingList: [],
         device: {
@@ -330,7 +330,10 @@
         },
         deviceList: [],
         path: null,
-        radiusPoint: null,
+        radiusPoint: {
+          lat: null,
+          lng: null,
+        },
         workerIdOption: [{
           value: '1600300211',
           label: '1600300211'
@@ -354,7 +357,7 @@
         deviceModelOption: [
           {
             value: 'QTZ5010',
-            label: 'QTZ5010/50m'
+            label: 'QTZ5010/L50m/H40m'
           }],
         magnificationOption: [
           {
@@ -378,6 +381,7 @@
           switch (newVal) {
             case 'QTZ5010':
               this.device.bigLength = 50;
+              this.device.bigHeight = 40;
               break;
             default:
               break;
@@ -411,6 +415,7 @@
           let radius = parseFloat(newVal.startRadius).toFixed(1);
           this.path = this.pathLineCalLocation(angle, newVal.point.lng, newVal.point.lat, newVal.bigLength);
           this.radiusPoint = this.radiusPointCalLocation(angle, newVal.point.lng, newVal.point.lat, radius);
+          console.log(this.radiusPoint)
         },
         deep: true,
         immediate: true
@@ -453,6 +458,7 @@
             lng: '',
           },
           bigLength: 0,
+          bigHeight: 0,
         };
       },
       handler({BMap, map}) {
@@ -467,6 +473,13 @@
             console.log(response.data);
             if (response.data.success === true) {
               this.buildingList = response.data.result;
+            }
+          });
+        this.axios.post('/center', {})
+          .then((response) => {
+            console.log(response.data);
+            if (response.data.success === true) {
+              this.center = response.data.result;
             }
           });
       },
@@ -516,7 +529,7 @@
       },
       running($event) {
         if ($event) {
-          this.connectAll();
+          //this.connectAll();
           console.log('开始发送operationLog');
           this.interval = setInterval(this.sendOperationLog, 1000);
         } else {
@@ -531,29 +544,30 @@
           this.axios.post('http://localhost:8070/startRunning', {'deviceId': row.deviceId}, {
             headers: {
               'deviceId': row.deviceId,
+              'deviceModel': row.deviceModel,
+              'longitude': row.lng,
+              'latitude': row.lat,
             }
-          })
-            .then((response) => {
-              if (response.success === true) {
-                $event = true;
-              } else {
-                $event = false;
-              }
-            });
+          }).then((response) => {
+            if (response.success === true) {
+              $event = true;
+            } else {
+              $event = false;
+            }
+          });
         } else {
           console.log('断开')
           this.axios.post('http://localhost:8070/stopRunning', {'deviceId': row.deviceId}, {
             headers: {
               'deviceId': row.deviceId,
             }
-          })
-            .then((response) => {
-              if (response.success === true) {
-                $event = false;
-              } else {
-                $event = true;
-              }
-            });
+          }).then((response) => {
+            if (response.success === true) {
+              $event = false;
+            } else {
+              $event = true;
+            }
+          });
         }
 
       },
@@ -563,13 +577,15 @@
           this.axios.post('http://localhost:8070/startRunning', {deviceId: this.deviceList[i].deviceId}, {
             headers: {
               'deviceId': this.deviceList[i].deviceId,
+              'deviceModel': this.deviceList[i].deviceModel,
+              'longitude': this.deviceList[i].lng,
+              'latitude': this.deviceList[i].lat,
             }
-          })
-            .then((response) => {
-              if (response.data.success === true) {
-                this.deviceList[i].connection = true;
-              }
-            });
+          }).then((response) => {
+            if (response.data.success === true) {
+              this.deviceList[i].connection = true;
+            }
+          });
         }
       },
       disconnectAll() {
@@ -579,6 +595,9 @@
             this.axios.post('http://localhost:8070/stopRunning', {deviceId: this.deviceList[i].deviceId}, {
               headers: {
                 'deviceId': this.deviceList[i].deviceId,
+                // 'deviceModel': this.deviceList[i].deviceModel,
+                // 'longitude': this.deviceList[i].lng,
+                // 'latitude': this.deviceList[i].lat,
               }
             })
               .then((response) => {
@@ -617,7 +636,7 @@
             let time = this.$moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
             this.deviceList[i].startRadius = Math.abs((this.deviceList[i].startRadius + radiusSpeed) % this.deviceList[i].bigLength);
             this.deviceList[i].startAngle = (this.deviceList[i].startAngle + angleSpeed) % 360;
-            this.deviceList[i].startHeight = (this.deviceList[i].startHeight + heightSpeed) % 40;
+            this.deviceList[i].startHeight = (this.deviceList[i].startHeight + heightSpeed) % this.deviceList[i].bigHeight;
             this.deviceList[i].path = this.pathLineCalLocation(this.deviceList[i].startAngle, this.deviceList[i].point.lng, this.deviceList[i].point.lat, this.deviceList[i].bigLength);
             this.deviceList[i].radiusPoint = this.radiusPointCalLocation(this.deviceList[i].startAngle, this.deviceList[i].point.lng, this.deviceList[i].point.lat, this.deviceList[i].startRadius);
 
@@ -641,8 +660,8 @@
                 'deviceId': operationLog.deviceId,
               }
             }).then((response) => {
-                console.log('发送成功')
-              });
+              console.log('发送成功')
+            });
           }
         }
       },

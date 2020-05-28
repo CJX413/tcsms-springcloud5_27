@@ -33,12 +33,12 @@ public class ReceiveController {
     @PreAuthorize(value = "hasAnyAuthority('SERVER')")
     @RequestMapping(value = "/receiveWarning", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String receiveWarning(@RequestBody String json) {
-        log.info("接收到警报warning---------------" + json);
-        webSocket.sendWarning(json);
+        log.info("接收到警报warning:{}", json);
+        webSocket.sendToMonitorAndAdmin(WebSocket.TYPE_1, json);
         try {
             //txCloudSmsServiceImp.sendWarning(json);
         } catch (Exception e) {
-            webSocket.sendWarning("群发短信失败！" + e.getMessage());
+            webSocket.sendToMonitorAndAdmin(WebSocket.TYPE_1, "群发短信失败！" + e.getMessage());
         }
         return new ResultJSON(200, true, "接收到报警信号！", null).toString();
     }
@@ -52,8 +52,16 @@ public class ReceiveController {
     @PreAuthorize(value = "hasAnyAuthority('SERVER')")
     @RequestMapping(value = "/receiveMonitorStatus", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String receiveMonitorStatus(@RequestBody String json) {
-        log.info("接收到monitorStatus---------------");
+        log.info("接收到monitorStatus{}", json);
         webSocket.sendMonitorStatusToAdmin(json);
+        return new ResultJSON(200, true, "接收到监控器状态！", null).toString();
+    }
+
+    @PreAuthorize(value = "hasAnyAuthority('SERVER')")
+    @RequestMapping(value = "/receiveOnlineLogStatus", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String receiveOnlineLogStatus(@RequestBody String json) {
+        log.info("接收到OnlineLogStatus:{}", json);
+        webSocket.sendToMonitorAndAdmin(WebSocket.TYPE_2, json);
         return new ResultJSON(200, true, "接收到监控器状态！", null).toString();
     }
 }

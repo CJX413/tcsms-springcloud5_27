@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.tcsms.business.Entity.User;
 import com.tcsms.business.Exception.CustomizeException;
 import com.tcsms.business.JSON.ResultJSON;
-import com.tcsms.business.Service.ReceiveServiceImp.InvitationCodeServiceImp;
+import com.tcsms.business.Service.ReceiveServiceImp.EnvironmentServiceImp;
 import com.tcsms.business.Service.ReceiveServiceImp.RedisServiceImp;
 import com.tcsms.business.Service.ReceiveServiceImp.TxCloudSmsServiceImp;
 import com.tcsms.business.Service.ReceiveServiceImp.UserServiceImp;
@@ -26,7 +26,7 @@ public class AuthController {
     @Autowired
     RedisServiceImp redisServiceImp;
     @Autowired
-    InvitationCodeServiceImp invitationCodeServiceImp;
+    EnvironmentServiceImp environmentServiceImp;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -49,7 +49,7 @@ public class AuthController {
             String verificationCode = jsonObject.get("verificationCode").getAsString();
             String invitationCode = jsonObject.get("invitationCode").getAsString();
             String pass = jsonObject.get("pass").getAsString();
-            if (invitationCodeServiceImp.checkInvitationCode(invitationCode) &&
+            if (environmentServiceImp.checkInvitationCode(invitationCode) &&
                     checkVerificationCode(phone, verificationCode)) {
                 User user = new User();
                 user.setUsername(phone);

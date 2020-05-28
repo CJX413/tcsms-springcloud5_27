@@ -18,7 +18,7 @@
         </el-menu>
       </el-collapse-item>
     </el-collapse>
-    <baidu-map class="map" :center="{lng: deviceList[0].longitude, lat: deviceList[0].latitude}" :zoom="zoom"
+    <baidu-map class="map" :center="center" :zoom="zoom"
                @ready="handler" :scroll-wheel-zoom="true"
                style="height: 500px">
       <!--缩放-->
@@ -76,6 +76,10 @@
     },
     data() {
       return {
+        center: {
+          lat: null,
+          lng: null,
+        },
         buildingList: [],
         deviceList: [
           {
@@ -116,6 +120,12 @@
             if (response.data.success === true) {
               this.buildingList = response.data.result;
               console.log(this.buildingList)
+            }
+          });
+        this.axios.post('/center', {})
+          .then((response) => {
+            if (response.data.success === true) {
+              this.center = response.data.result;
             }
           });
       },

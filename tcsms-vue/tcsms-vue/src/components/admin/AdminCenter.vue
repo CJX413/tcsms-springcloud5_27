@@ -59,18 +59,40 @@
     <el-col :span="8">
       <el-card class="box-card" style="text-align: left">
         <div slot="header" class="clearfix">
-          <span>邀请码</span>
+          <span>环境配置</span>
           <el-button style="float: right" type="primary" size="small" @click="updateInvitationCode">
             修改
           </el-button>
-          <el-row style="padding-top: 20px">
-            <el-input
-              maxLength="6"
-              v-model="invitationCode"
-              oninput="value=value.replace(/[^\d]/g,'')">
-            </el-input>
-          </el-row>
         </div>
+        <el-table
+          :data="environment"
+          style="width: 100%"
+          height="100">
+          <el-table-column
+            label="邀请码"
+            prop="invitationCode">
+            <template slot-scope="props">
+              <el-input maxLength='7' size="mini" v-model="props.row.invitationCode"
+                        placeholder="请输入内容" oninput="value=value.replace(/[^0-9.]/g,'')"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="center(纬度)"
+            prop="centerLat">
+            <template slot-scope="props">
+              <el-input size="mini" v-model="props.row.centerLat"
+                        placeholder="请输入内容" oninput="value=value.replace(/[^0-9.]/g,'')"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="center(经度)"
+            prop="centerLng">
+            <template slot-scope="props">
+              <el-input size="mini" v-model="props.row.centerLng"
+                        placeholder="请输入内容" oninput="value=value.replace(/[^0-9.]/g,'')"></el-input>
+            </template>
+          </el-table-column>
+        </el-table>
       </el-card>
     </el-col>
   </el-row>
@@ -81,7 +103,7 @@
     name: "AdminCenter",
     data() {
       return {
-        invitationCode: '',
+        environment: [],
         userInfoForm: {
           username: '',
           name: '',
@@ -102,24 +124,26 @@
     methods: {
       initPage() {
         this.userInfoForm = JSON.parse(JSON.stringify(this.$store.state.userInfo));
-        this.axios.post('/invitationCode', {})
+        this.axios.post('/environment', {})
           .then((response) => {
             console.log(response.data);
             if (response.data.success === true) {
-              this.invitationCode = response.data.result.code;
+              this.environment = [response.data.result];
             }
           });
       },
       updateInvitationCode() {
-        this.axios.post('/updateInvitationCode', {
-          invitationCode: this.invitationCode,
+        this.axios.post('/updateEnvironment', {
+          invitationCode: this.environment[0].invitationCode,
+          centerLat: this.environment[0].centerLat,
+          centerLng: this.environment[0].centerLng,
         })
           .then((response) => {
             console.log(response.data);
             if (response.data.success === true) {
-              this.$message.success('修改邀请码成功！');
+              this.$message.success('修改环境配置成功！');
             } else {
-              this.utils.alertErrorMessage('修改验证码失败！', response.data.message);
+              this.utils.alertErrorMessage('修改环境配置失败！', response.data.message);
             }
           });
       },

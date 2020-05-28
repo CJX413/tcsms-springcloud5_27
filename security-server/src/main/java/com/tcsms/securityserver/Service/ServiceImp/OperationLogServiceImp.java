@@ -21,8 +21,7 @@ public class OperationLogServiceImp implements OperationLogService {
     }
 
     public void receiveOperationLog(OperationLog operationLog) {
-        redisServiceImp.set(operationLog.getDeviceId(), operationLog.toString());
-        log.info(operationLog.toString());
+        redisServiceImp.setex(operationLog.getDeviceId(), operationLog.toString());
         operationLogDao.save(operationLog);
     }
 }

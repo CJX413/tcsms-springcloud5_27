@@ -1,5 +1,6 @@
 package com.tcsms.securityserver.Service.ServiceImp;
 
+import com.google.gson.JsonObject;
 import com.tcsms.securityserver.Config.TokenConfig;
 import com.tcsms.securityserver.Entity.WarningLog;
 import com.tcsms.securityserver.Monitor.MonitorManager;
@@ -24,10 +25,13 @@ public class RestTemplateServiceImp {
     @Autowired
     RedisServiceImp redisServiceImp;
     @Autowired
+    private OnlineLogServiceImp onlineLogServiceImp;
+    @Autowired
     TokenConfig tokenConfig;
 
     private static final String WARNING_RECEIVE_URL = "http://business-server/receiveWarning";
     private static final String MONITOR_STATUS_RECEIVE_URL = "http://business-server/receiveMonitorStatus";
+    private static final String DEVICE_ONLINE_RECEIVE_URL = "http://business-server/receiveOnlineLogStatus";
     private final static int RESEND_TIMES = 5;
 
     public String sendJson(String url, String json) {
@@ -83,5 +87,22 @@ public class RestTemplateServiceImp {
         Optional.ofNullable(MonitorManager.getMonitorStatus()).ifPresent(monitorStatus -> {
             sendJson(MONITOR_STATUS_RECEIVE_URL, monitorStatus.toString());
         });
+    }
+
+    @Async
+    public void sendDeviceConnect(String deviceId, String date) throws Exception {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("message", deviceId + "在" + date + "上线了！");
+        jsonObject.add("data", onlineLogServiceImp.onlineLog());
+        sendJson(DEVICE_ONLINE_RECEIVE_URL, jsonObject.toString());
+    }
+
+    @Async
+    public void sendDeviceDisconnect(String deviceId, String date) throws Exception {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("message", deviceId + "在" + date + "下线了！");
+        jsonObject.add("data", onlineLogServiceImp.onlineLog());
+        sendJson(DEVICE_ONLINE_RECEIVE_URL, jsonObject.toString());
+
     }
 }

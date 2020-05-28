@@ -98,8 +98,8 @@
       return {
         componentType: 'device-location',
         activeHeader: null,
-        activeAside: '1',
-        menuSwitch: ['-1', '0'],
+        activeAside: null,
+        menuSwitch: true,
         switchFlagA: 0,
         switchFlagH: 0,
       };
@@ -107,15 +107,6 @@
     computed: {
       warningMessage() {
         return this.$store.state.warningMessage;
-      },
-    },
-    watch: {
-      warningMessage(newVal, oldVal) {
-        if (newVal.length !== 0) {
-          this.$alert(newVal[newVal.length - 1], '新消息', {
-            confirmButtonText: '确定',
-          });
-        }
       },
     },
     mounted() {  //初始化页面要在mounted方法中调用自己也得初始化方法

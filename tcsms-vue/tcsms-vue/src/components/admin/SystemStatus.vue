@@ -1,15 +1,17 @@
 <template>
   <el-table
-    :data="tableData.filter(data => !search ||
+    :data="monitorStatus.status.filter(data => !search ||
      data.type.toLowerCase().includes(search.toLowerCase()) || data.deviceId.toLowerCase().includes(search.toLowerCase()))"
     style="width: 100%"
     height="550">
     <el-table-column
-      prop="type"
+      :formatter="typeFormatter"
+      prop="name"
       label="监控器类型">
     </el-table-column>
     <el-table-column
-      prop="deviceId"
+      :formatter="deviceFormatter"
+      prop="name"
       label="监控设备">
     </el-table-column>
     <el-table-column
@@ -52,7 +54,6 @@
     data() {
       return {
         search: '',
-        tableData: [],
       };
     },
     computed: {
@@ -60,35 +61,21 @@
         return this.$store.state.monitorStatus;
       },
     },
-    watch: {
-      monitorStatus: function () {
-        this.initTableData();
-      }
-    }
-    ,
     mounted() {
-      this.initTableData();
+
     }
     ,
     methods: {
-      initTableData() {
-        let monitorStatus = this.monitorStatus.status;
-        let tableData = [];
-        for (let i = 0; i < monitorStatus.length; i++) {
-          let str = monitorStatus[i].name.split('-');
-          let device = '';
-          for (let i = 1; i < str.length; i++) {
-            device = device + str[i] + ' ';
-          }
-          tableData.push(
-            {
-              type: str[0],
-              deviceId: device,
-              living: monitorStatus[i].living,
-              running: monitorStatus[i].running,
-            })
+      typeFormatter(row, column) {
+        return row.name.split('-')[0];
+      },
+      deviceFormatter(row, column) {
+        let array = row.name.split('-');
+        let device = '';
+        for (let i = 1; i < array.length; i++) {
+          device = device + array[i] + ' ';
         }
-        this.tableData = tableData;
+        return device;
       }
     }
   }

@@ -11,7 +11,13 @@
         active-text-color="#ffd04b"
         style="height: inherit">
         <el-row>
-          <el-col :span="3" :offset="19">
+          <el-col :span="1" :offset="18">
+            <el-menu-item index="2">
+              <el-badge :value="warningMessage.length" class="item">
+                <i class="el-icon-message" style="font-size: 25px;"></i></el-badge>
+            </el-menu-item>
+          </el-col>
+          <el-col :span="3">
             <el-submenu index="1">
               <template slot="title">
                 <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
@@ -92,6 +98,7 @@
       DeviceManage: () => import("../components/admin/DeviceManage"),
       MonitorManage: () => import("../components/admin/MonitorManage.vue"),
       OperatorManage: () => import("../components/admin/OperatorManage.vue"),
+      WarningMessage: () => import("../components/WarningMessage.vue"),
     },
     data() {
       return {
@@ -107,30 +114,33 @@
       monitorStatus() {
         return this.$store.state.monitorStatus;
       },
+      warningMessage() {
+        return this.$store.state.warningMessage;
+      },
     },
     mounted() {
-      console.log(this.monitorStatus.switch + '----------------------------')
       this.initPage();
       this.initMonitorStatus();
     },
     methods: {
       changeStatus($event) {
-        if (this.monitorStatus.switch === false) {
-          console.log('关')
-          this.axios.post('/closeSecuritySystem', {})
+        if ($event) {
+          console.log('开');
+          this.axios.post('/openSecuritySystem', {})
             .then((response) => {
               if (response.data.success === false) {
-                this.utils.alertErrorMessage('关闭安全系统状态失败！', response.data.message)
+                this.utils.alertErrorMessage('开启安全系统状态失败！', response.data.message)
               }
               console.log(response);
               this.$store.state.monitorStatus = response.data.result;
               $event = this.$store.state.monitorStatus.switch;
             });
         } else {
-          this.axios.post('/openSecuritySystem', {})
+          console.log('关');
+          this.axios.post('/closeSecuritySystem', {})
             .then((response) => {
               if (response.data.success === false) {
-                this.utils.alertErrorMessage('开启安全系统状态失败！', response.data.message)
+                this.utils.alertErrorMessage('关闭安全系统状态失败！', response.data.message)
               }
               console.log(response);
               this.$store.state.monitorStatus = response.data.result;
@@ -149,14 +159,14 @@
           });
       },
       initMonitorStatus() {
-        // this.axios.post('/monitorStatus', {})
-        //   .then((response) => {
-        //     if (response.data.success === false) {
-        //       this.utils.alertErrorMessage('获取安全监控系统状态失败！', response.data.message);
-        //     }
-        //     this.$store.state.monitorStatus = response.data.result;
-        //     console.log(this.$store.state.monitorStatus);
-        //   });
+        this.axios.post('/monitorStatus', {})
+          .then((response) => {
+            if (response.data.success === false) {
+              this.utils.alertErrorMessage('获取安全监控系统状态失败！', response.data.message);
+            }
+            this.$store.state.monitorStatus = response.data.result;
+            console.log(this.$store.state.monitorStatus);
+          });
       },
       logout() {
         localStorage.removeItem('token');
@@ -175,6 +185,7 @@
             this.logout();
             break;
           case "2":
+            this.componentType = 'warning-message';
             break;
           default:
         }

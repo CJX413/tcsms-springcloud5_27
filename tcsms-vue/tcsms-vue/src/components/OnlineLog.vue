@@ -1,6 +1,6 @@
 <template>
   <el-table
-    :data="tableData"
+    :data="onlineLog"
     style="width: 100%">
     <el-table-column
       prop="deviceId"
@@ -33,13 +33,17 @@
     name: "OnlineLog",
     data() {
       return {
-        tableData: [],
         geocoder: null,
       };
     },
     mounted() {
       this.initPage();
       this.geocoder = new BMap.Geocoder();
+    },
+    computed: {
+      onlineLog() {
+        return this.$store.state.onlineLog;
+      }
     },
     methods: {
       initPage() {
@@ -55,7 +59,7 @@
                   data[i].address = res;
                 })
               }
-              this.tableData = data;
+              this.$store.state.onlineLog = data;
             }
           });
       },

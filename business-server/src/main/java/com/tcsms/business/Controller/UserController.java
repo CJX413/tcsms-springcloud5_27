@@ -35,7 +35,7 @@ public class UserController {
     @Autowired
     RoleApplyServiceImp roleApplyServiceImp;
     @Autowired
-    InvitationCodeServiceImp invitationCodeServiceImp;
+    EnvironmentServiceImp environmentServiceImp;
 
 
     @RequestMapping("/isLogin")
@@ -197,24 +197,41 @@ public class UserController {
     }
 
     @PreAuthorize(value = "hasAnyAuthority('ADMIN')")
-    @RequestMapping("/invitationCode")
-    public String invitationCode() {
-        InvitationCode invitationCode = invitationCodeServiceImp.getInvitationCode();
-        return new ResultJSON(200, true, "获取邀请码成功！", invitationCode.toString()).toString();
+    @RequestMapping("/environment")
+    public String environment() {
+        JsonObject result;
+        try {
+            result = environmentServiceImp.getEnvironment();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultJSON(200, false, "获取环境配置失败！", null).toString();
+        }
+        return new ResultJSON(200, true, "获取环境配置成功！", result).toString();
     }
 
     @PreAuthorize(value = "hasAnyAuthority('ADMIN')")
-    @RequestMapping("/updateInvitationCode")
-    public String updateInvitationCode(@RequestBody String json) {
+    @RequestMapping("/updateEnvironment")
+    public String updateEnvironment(@RequestBody String json) {
         try {
-            JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
-            String invitationCode = jsonObject.get("invitationCode").getAsString();
-            invitationCodeServiceImp.save(invitationCode);
+            Environment environment = new Gson().fromJson(json, Environment.class);
+            environmentServiceImp.updateEnvironment(environment);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResultJSON(200, false, JsonHelper.replaceIllegalChar(e.getMessage()), null).toString();
         }
-        return new ResultJSON(200, true, "修改邀请码成功！", null).toString();
+        return new ResultJSON(200, true, "修改环境配置成功！", null).toString();
+    }
+
+    @RequestMapping("/center")
+    public String center() {
+        JsonObject result;
+        try {
+            result = environmentServiceImp.getCenter();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultJSON(200, false, JsonHelper.replaceIllegalChar(e.getMessage()), null).toString();
+        }
+        return new ResultJSON(200, true, "获取工地中心点成功！", result).toString();
     }
 
     /**

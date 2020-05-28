@@ -23,8 +23,12 @@ public class DeviceRegistryServiceImp implements DeviceRegistryService {
     public DeviceRegistryDao getDao() {
         return deviceRegistryDao;
     }
+
     @Transactional(rollbackFor = Exception.class)
-    public void insertNewDevice(DeviceRegistry device) throws Exception{
+    public void insertNewDevice(DeviceRegistry device) throws Exception {
+        if (deviceRegistryDao.findById(device.getDeviceId()).isPresent()) {
+            return;
+        }
         deviceRegistryDao.save(device);
         WarningRanking warningRanking = new WarningRanking();
         warningRanking.setDeviceId(device.getDeviceId());

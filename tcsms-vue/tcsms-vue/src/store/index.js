@@ -5,13 +5,13 @@ import utils from '../utils'
 Vue.use(Vuex);
 
 const state = {
-  userInfo: {
-    username: '',
-    name: '',
-    workerId: '',
-    phoneNumber: '',
-    sex: '',
-  },
+    userInfo: {
+      username: '',
+      name: '',
+      workerId: '',
+      phoneNumber: '',
+      sex: '',
+    },
     allOperationLog: [],
     allOperationLogDate: null,
     operationLog: {
@@ -56,7 +56,8 @@ const state = {
         // }
       ]
     },
-    tableData: [],
+    onlineLog: [],
+    tableData: [],//警报表的数据源
     warningMessage: [],
     websock: null,
   }
@@ -180,45 +181,51 @@ function onopen() {
 
 function onmessage(e) {
   console.log('收到信息--------------');
-  let data = JSON.parse(e.data);
-  console.log(data)
-  console.log(data.data.error)
-  if (data.message === 'warning') {
-    console.log(data);
-    let innerData = data.data;
+  let receiveData = JSON.parse(e.data);
+  console.log(receiveData)
+  if (receiveData.message === 'warning') {
+    console.log(receiveData);
+    let innerData = receiveData.data;
     state.warningMessage.push(innerData.message);
+    utils.alertMessageBox(innerData.message);
     mutations.ADD_WARNING(innerData);
   }
-  else if (data.message === 'operationLog') {
-    if (data.data.error === undefined) {
-      state.operationLog = data.data;
+  else if (receiveData.message === 'operationLog') {
+    if (receiveData.data.error === undefined) {
+      state.operationLog = receiveData.data;
     } else {
-      utils.alertErrorMessage('发送该设备当前的运行日志失败！', data.data.error);
+      utils.alertErrorMessage('发送该设备当前的运行日志失败！', receiveData.data.error);
     }
   }
-  else if (data.message === 'operationLogDate') {
-    if (data.data.error === undefined) {
-      state.operationLogDate = data.data;
+  else if (receiveData.message === 'operationLogDate') {
+    if (receiveData.data.error === undefined) {
+      state.operationLogDate = receiveData.data;
     } else {
-      utils.alertErrorMessage('发送该设备的历史运行日志失败！', data.data.error);
+      console.log('发送该设备的历史运行日志失败！');
+      utils.alertErrorMessage('发送该设备的历史运行日志失败！', receiveData.data.error);
     }
   }
-  else if (data.message === 'monitorStatus') {
-    state.monitorStatus = data.data;
+  else if (receiveData.message === 'monitorStatus') {
+    state.monitorStatus = receiveData.data;
   }
-  else if (data.message === 'allOperationLog') {
-    if (data.data.error === undefined) {
-      state.allOperationLog = data.data;
+  else if (receiveData.message === 'allOperationLog') {
+    if (receiveData.data.error === undefined) {
+      state.allOperationLog = receiveData.data;
     } else {
-      utils.alertErrorMessage('发送所有设备当前的运行日志失败！', data.data.error);
+      utils.alertErrorMessage('发送所有设备当前的运行日志失败！', receiveData.data.error);
     }
   }
-  else if (data.message === 'allOperationLogDate') {
-    if (data.data.error === undefined) {
-      state.allOperationLogDate = data.data;
+  else if (receiveData.message === 'allOperationLogDate') {
+    if (receiveData.data.error === undefined) {
+      state.allOperationLogDate = receiveData.data;
     } else {
-      utils.alertErrorMessage('发送所有设备当前的运行日志失败！', data.data.error);
+      utils.alertErrorMessage('发送所有设备当前的运行日志失败！', receiveData.data.error);
     }
+  }
+  else if (receiveData.message === 'onlineLog') {
+    console.log(receiveData.data);
+    utils.alertMessage(receiveData.data.message);
+    state.onlineLog = receiveData.data.data;
   }
 }
 

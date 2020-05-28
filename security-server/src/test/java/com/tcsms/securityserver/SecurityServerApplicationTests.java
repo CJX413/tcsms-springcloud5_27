@@ -1,16 +1,14 @@
 package com.tcsms.securityserver;
 
 import com.tcsms.securityserver.Dao.*;
-import com.tcsms.securityserver.Entity.DeviceRegistry;
 import com.tcsms.securityserver.Entity.OperationLog;
 import com.tcsms.securityserver.ScheduTask.RefreshOperationLogTab;
 import com.tcsms.securityserver.Service.ServiceImp.DeviceRegistryServiceImp;
+import com.tcsms.securityserver.Service.ServiceImp.OnlineLogServiceImp;
 import com.tcsms.securityserver.Service.ServiceImp.OperationLogDateServiceImp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.text.SimpleDateFormat;
 
 
 @SpringBootTest
@@ -30,6 +28,9 @@ class SecurityServerApplicationTests {
     OperationLogDao operationLogDao;
     @Autowired
     OnlineLogDao runningLogDao;
+
+    @Autowired
+    WarningRankingDao warningRankingDao;
 
     @Test
     void contextLoads() throws InterruptedException {
@@ -66,6 +67,19 @@ class SecurityServerApplicationTests {
 //        runningLog.setDeviceId("D3");
 //        runningLogDao.save(runningLog);
         //System.out.println(runningLogDao.findById(8).toString());
+    }
+
+    @Autowired
+    OnlineLogDao onlineLogDao;
+    @Autowired
+    OnlineLogServiceImp onlineLogServiceImp;
+    @Autowired
+    RefreshOperationLogTab refreshOperationLogTab;
+
+    @Test
+    void test3() throws InterruptedException {
+        System.out.println("---------------------------------");
+        System.out.println(sqlMapper.existsOperationLogDate("2020_05_13"));
     }
 
 

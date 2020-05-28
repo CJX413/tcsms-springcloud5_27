@@ -36,14 +36,14 @@ public class OperationLogDateServiceImp {
 
 
     @Async
-    public void refreshOperationLogDateQueue(Deque<OperationLog> deque, String deviceId, String date) throws RuntimeException {
+    public void refreshOperationLogDateQueue(Deque<OperationLog> deque, String deviceId, String time, String date) throws RuntimeException {
         log.info("队列中的消息不足，重新重数据库获取消息");
-        OperationLog lastOperationLog = deque.getLast();
-        String time = lastOperationLog.getTime();
-        Optional.ofNullable(sqlMapper.queryOperationLogDateByDeviceIdAndTimeL600(deviceId, time, date))
-                .ifPresent(operationLogs -> {
-                    operationLogs.forEach(operationLog -> deque.addLast(operationLog));
-                });
+        synchronized (deque) {
+            Optional.ofNullable(sqlMapper.queryOperationLogDateByDeviceIdAndTimeL600(deviceId, time, date))
+                    .ifPresent(operationLogs -> {
+                        operationLogs.forEach(operationLog -> deque.addLast(operationLog));
+                    });
+        }
     }
 
     public void queryAllDeviceOperationLogDateByDeviceIdAndTime(ConcurrentHashMap<String, ConcurrentHashMap<Long, OperationLog>> hashMap,
@@ -74,7 +74,7 @@ public class OperationLogDateServiceImp {
             if (list != null) {
                 ConcurrentHashMap<Long, OperationLog> innerHashMap = hashMap.getOrDefault(device.getDeviceId(), null);
                 if (innerHashMap != null) {
-                    clearExpiredDataOfMap(innerHashMap, newTime);
+                    //clearExpiredDataOfMap(innerHashMap, newTime);
                     for (OperationLog operationLog : list) {
                         Date dateTime = simpleDateFormat.parse(operationLog.getTime());
                         innerHashMap.put(dateTime.getTime(), operationLog);

@@ -1,5 +1,5 @@
 <template>
-  <baidu-map class="map" :center="{lng: innerDeviceList[0].longitude, lat: innerDeviceList[0].latitude}" :zoom="zoom"
+  <baidu-map class="map" :center="center" :zoom="zoom"
              :scroll-wheel-zoom="true"
              style="height: 600px">
     <!--缩放-->
@@ -62,6 +62,10 @@
     props: ['deviceList'],
     data() {
       return {
+        center: {
+          lat: null,
+          lng: null,
+        },
         buildingList: [],
         point: {url: require('../../static/img/point.png'), size: {width: 12, height: 12}},
         R: 6371e3,
@@ -89,6 +93,7 @@
     },
     watch: {
       deviceList: function (newVal, oldVal) {
+        console.log(newVal);
         this.innerDeviceList = newVal;
         let deviceMap = new Map();
         for (let i = 0; i < newVal.length; i++) {
@@ -127,6 +132,12 @@
             if (response.data.success === true) {
               this.buildingList = response.data.result;
               console.log(this.buildingList)
+            }
+          });
+        this.axios.post('/center', {})
+          .then((response) => {
+            if (response.data.success === true) {
+              this.center = response.data.result;
             }
           });
       },

@@ -68,22 +68,23 @@ public class OperationLogServiceImp {
         return operationLogDao.countByDeviceId(deviceId);
     }
 
-    public void queryOperationLogByDeviceIdAndTime(Deque<OperationLog> deque, String deviceId, String time) throws RuntimeException{
+    public void queryOperationLogByDeviceIdAndTime(Deque<OperationLog> deque, String deviceId, String time) throws RuntimeException {
         log.info("队列中的消息不足，重新重数据库获取消息");
         Optional.ofNullable(operationLogDao.queryOperationLogByDeviceIdAndTimeL600(deviceId, time))
                 .ifPresent(operationLogs -> {
                     operationLogs.forEach(operationLog -> deque.addLast(operationLog));
                 });
     }
+
     @Async
-    public void refreshOperationLogQueue(Deque<OperationLog> deque, String deviceId) throws RuntimeException{
-        log.info("队列中的消息不足，重新重数据库获取消息");
-        OperationLog lastOperationLog = deque.getLast();
-        String time = lastOperationLog.getTime();
-        Optional.ofNullable(operationLogDao.queryOperationLogByDeviceIdAndTimeL600(deviceId, time))
-                .ifPresent(operationLogs -> {
-                    operationLogs.forEach(operationLog -> deque.addLast(operationLog));
-                });
+    public void refreshOperationLogQueue(Deque<OperationLog> deque, String deviceId, String time) throws RuntimeException {
+        synchronized (deque) {
+            log.info("队列中的消息不足，重新重数据库获取消息");
+            Optional.ofNullable(operationLogDao.queryOperationLogByDeviceIdAndTimeL600(deviceId, time))
+                    .ifPresent(operationLogs -> {
+                        operationLogs.forEach(operationLog -> deque.addLast(operationLog));
+                    });
+        }
     }
 
     public void queryAllDeviceOperationLogDateByDeviceIdAndTime(ConcurrentHashMap<String, ConcurrentHashMap<Long, OperationLog>> hashMap,
@@ -114,7 +115,7 @@ public class OperationLogServiceImp {
             if (list != null) {
                 ConcurrentHashMap<Long, OperationLog> innerHashMap = hashMap.getOrDefault(device.getDeviceId(), null);
                 if (innerHashMap != null) {
-                    clearExpiredDataOfMap(innerHashMap, newTime);
+                    //clearExpiredDataOfMap(innerHashMap, newTime);
                     for (OperationLog operationLog : list) {
                         Date dateTime = simpleDateFormat.parse(operationLog.getTime());
                         innerHashMap.put(dateTime.getTime(), operationLog);
@@ -124,6 +125,7 @@ public class OperationLogServiceImp {
             }
         }
     }
+
     private void clearExpiredDataOfMap(ConcurrentHashMap<Long, OperationLog> innerHashMap, Long newTime) {
         innerHashMap.keySet().forEach(oldTime -> {
             if (oldTime <= newTime) {

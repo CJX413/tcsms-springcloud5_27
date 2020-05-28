@@ -53,7 +53,7 @@
           <el-table-column>
             <template slot="header" slot-scope="scope">
               <el-input
-                v-model="search"
+                v-model="applyTableSearch"
                 size="small"
                 clearable
                 placeholder="用户名、工人号、姓名搜索"/>
@@ -224,7 +224,7 @@
                 type: 'success'
               });
             } else {
-              this.utils.alertErrorMessage('操作失败！',response.data.message);
+              this.utils.alertErrorMessage('操作失败！', response.data.message);
             }
           });
       },
@@ -239,7 +239,7 @@
                 type: 'success'
               });
             } else {
-              this.utils.alertErrorMessage('操作失败！',response.data.message);
+              this.utils.alertErrorMessage('操作失败！', response.data.message);
             }
           });
       },
@@ -258,7 +258,7 @@
                   message: '修改成功!'
                 });
               } else {
-                this.utils.alertErrorMessage('修改失败！',response.data.message);
+                this.utils.alertErrorMessage('修改失败！', response.data.message);
               }
             });
         }).catch(() => {
@@ -284,7 +284,7 @@
                   message: '删除成功!'
                 });
               } else {
-                this.utils.alertErrorMessage('删除失败！',response.data.message);
+                this.utils.alertErrorMessage('删除失败！', response.data.message);
               }
             });
         }).catch(() => {

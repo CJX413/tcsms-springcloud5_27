@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.tcsms.business.JSON.ResultJSON;
+import com.tcsms.business.Service.ReceiveServiceImp.OnlineLogServiceImp;
 import com.tcsms.business.Service.ReceiveServiceImp.OperationLogDateServiceImp;
 import com.tcsms.business.Service.ReceiveServiceImp.OperationLogServiceImp;
 import com.tcsms.business.Service.ReceiveServiceImp.WarningLogServiceImp;
@@ -34,6 +35,8 @@ public class OperationLogController {
     OperationLogServiceImp operationLogServiceImp;
     @Autowired
     WarningLogServiceImp warningLogServiceImp;
+    @Autowired
+    OnlineLogServiceImp onlineLogServiceImp;
 
     @PreAuthorize(value = "hasAnyAuthority('MONITOR','ADMIN')")
     @RequestMapping(value = "/openOperationLog", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -42,8 +45,11 @@ public class OperationLogController {
         String deviceId = jsonObject.get("deviceId").getAsString();
         String token = request.getHeader("authorization");
         String name = JwtTokenUtils.getUsername(token);
-        webSocket.openOperationLogSendThread(name, deviceId);
-        return new ResultJSON(200, true, "获取设备运行信息成功！", null).toString();
+        if (onlineLogServiceImp.isOnline(deviceId)) {
+            webSocket.openOperationLogSendThread(name, deviceId);
+            return new ResultJSON(200, true, "获取设备运行信息成功！", null).toString();
+        }
+        return new ResultJSON(200, false, "设备未上线！", null).toString();
     }
 
     @PreAuthorize(value = "hasAnyAuthority('MONITOR','ADMIN')")

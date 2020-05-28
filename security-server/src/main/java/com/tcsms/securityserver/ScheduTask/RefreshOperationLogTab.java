@@ -21,15 +21,10 @@ public class RefreshOperationLogTab {
     //每天23点执行
     @Scheduled(cron = "0 0 23 * * ?")
     public void refreshOperationLogTab() throws InterruptedException {
-        if (operationLogDateServiceImp.backupOperationLog()) {
-            log.info(">>>>>>>>>>>>>>>>>备份每日设备运行日志表成功<<<<<<<<<<<<<<<<");
-            if (operationLogDateServiceImp.refreshOperationLogTab()) {
-                log.info(">>>>>>>>>>>>>>>>>刷新每日设备运行日志表成功<<<<<<<<<<<<<<<<！");
-            } else {
-                log.info(">>>>>>>>>>>>>>>>>刷新每日设备运行日志表失败<<<<<<<<<<<<<<<<！");
-            }
+        if (operationLogDateServiceImp.refreshOperationLogTab()) {
+            log.info(">>>>>>>>>>>>>>>>>刷新每日设备运行日志表成功<<<<<<<<<<<<<<<<！");
         } else {
-            log.info(">>>>>>>>>>>>>>>>>备份每日设备运行日志表失败<<<<<<<<<<<<<<<<");
+            log.info(">>>>>>>>>>>>>>>>>刷新每日设备运行日志表失败<<<<<<<<<<<<<<<<！");
         }
     }
 }

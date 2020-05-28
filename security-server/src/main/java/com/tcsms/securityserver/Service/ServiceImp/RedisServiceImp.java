@@ -12,10 +12,19 @@ public class RedisServiceImp implements RedisService {
     @Autowired
     JedisPool jedisPool;
 
-    private static final String REGISTRY_SUFFIX = "_registry";//每台塔吊的注册情况在redis缓存中的key值的后缀
+    private static final int live = 5;//每台塔吊的注册情况在redis缓存中的key值的后缀
 
     public Jedis getJedis() {
         return jedisPool.getResource();
+    }
+
+    public void setex(String key, String value) {
+        Jedis jedis = getJedis();
+        try {
+            jedis.setex(key, live, value);
+        } finally {
+            jedis.close();
+        }
     }
 
     public void set(String key, String value) {
