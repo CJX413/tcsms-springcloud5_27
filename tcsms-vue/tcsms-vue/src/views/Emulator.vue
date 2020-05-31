@@ -171,29 +171,15 @@
           <bm-marker :icon="pointImg" :position="radiusPoint"></bm-marker>
 
           <!--建筑物的map-->
-          <div v-for="building of buildingList">
-            <bm-marker :position="building.pointOne">
-              <bm-label :content="building.buildingId" :labelStyle="{color: 'red', fontSize : '15px'}"
-                        :offset="{width: -20, height: 20}"/>
-            </bm-marker>
-            <bm-marker :position="building.pointTwo">
-              <bm-label :content="building.buildingId" :labelStyle="{color: 'red', fontSize : '15px'}"
-                        :offset="{width: -20, height: 20}"/>
-            </bm-marker>
-            <bm-marker :position="building.pointThree">
-              <bm-label :content="building.buildingId" :labelStyle="{color: 'red', fontSize : '15px'}"
-                        :offset="{width: -20, height: 20}"/>
-            </bm-marker>
-            <bm-marker :position="building.pointFour">
-              <bm-label :content="building.buildingId" :labelStyle="{color: 'red', fontSize : '15px'}"
-                        :offset="{width: -20, height: 20}"/>
-            </bm-marker>
-            <bm-polyline
-              :path="[building.pointOne,building.pointTwo,building.pointThree,building.pointFour,building.pointOne]"
-              stroke-color="blue"
-              :stroke-opacity="0.5" :stroke-weight="2">
-            </bm-polyline>
-          </div>
+          <bm-marker v-for="building of buildingList" :key="building.buildingId"
+                     :position="building.point">
+            <bm-label :content="building.buildingId+'/'+building.height+'m'" :labelStyle="{color: 'red', fontSize : '15px'}"
+                      :offset="{width: -20, height: 20}"/>
+            <bm-circle :center="building.point" :radius="building.length"
+                       stroke-color="blue" :stroke-opacity="0.5" :stroke-weight="2"
+                       :editing="false">
+            </bm-circle>
+          </bm-marker>
         </bml-marker-clusterer>
       </baidu-map>
     </el-row>
@@ -305,8 +291,8 @@
         interval: null,
         pointImg: {url: require('../../static/img/point.png'), size: {width: 12, height: 12}},
         center: {
-          lng: null,
-          lat: null,
+          lng: '',
+          lat: '',
         },
         buildingList: [],
         device: {
@@ -331,8 +317,8 @@
         deviceList: [],
         path: null,
         radiusPoint: {
-          lat: null,
-          lng: null,
+          lat: '',
+          lng: '',
         },
         workerIdOption: [{
           value: '1600300211',
@@ -376,6 +362,28 @@
       this.initPage();
     },
     watch: {
+      'device.deviceId': {
+        handler(newVal, oldVal) {
+          switch (newVal) {
+            case 'D1':
+              this.device.point.lat = 25.318573;
+              this.device.point.lng = 110.423326;
+              break;
+            case 'D2':
+              this.device.point.lat = 25.318569;
+              this.device.point.lng = 110.42413;
+              break;
+            case 'D3':
+              this.device.point.lat = 25.318594;
+              this.device.point.lng = 110.42506;
+              break;
+            default:
+              break;
+          }
+        },
+        deep: true,
+        immediate: true
+      },
       'device.deviceModel': {
         handler(newVal, oldVal) {
           switch (newVal) {
@@ -502,7 +510,7 @@
         };
       },
       radiusPointCalLocation(angle, startLong, startLat, radius) {
-        //将距离转换成经度的计算公式
+        //将距离转换成经纬度的计算公式
         let P = radius / 6371e3;
         // 转换为radian，否则结果会不正确
         angle = this.toRadians(angle);

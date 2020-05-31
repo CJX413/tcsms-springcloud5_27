@@ -30,4 +30,7 @@ public interface SqlMapper {
     int countByDeviceIdOfOperationLogDate(@Param("deviceId") String deviceId,
                                           @Param("date") String date);
 
+    @Select("SELECT COUNT(table_name) FROM INFORMATION_SCHEMA.TABLES WHERE table_name='operation_log_${date}';")
+    int existsOperationLogDate(@Param("date") String date);
+
 }

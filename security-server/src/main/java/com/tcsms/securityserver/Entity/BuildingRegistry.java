@@ -1,4 +1,4 @@
-package com.tcsms.business.Entity;
+package com.tcsms.securityserver.Entity;
 
 import lombok.Data;
 

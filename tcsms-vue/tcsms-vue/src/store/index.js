@@ -13,7 +13,8 @@ const state = {
       sex: '',
     },
     allOperationLog: [],
-    allOperationLogDate: null,
+    allOperationLogDate: {
+    },
     operationLog: {
       deviceModel: '',
       deviceId: '',

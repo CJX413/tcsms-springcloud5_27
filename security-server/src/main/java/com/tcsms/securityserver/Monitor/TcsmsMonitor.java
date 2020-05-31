@@ -4,11 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.tcsms.securityserver.Config.ExceptionInfo;
 import com.tcsms.securityserver.Config.WarningInfo;
+import com.tcsms.securityserver.Entity.BuildingRegistry;
+import com.tcsms.securityserver.Entity.DeviceRegistry;
 import com.tcsms.securityserver.Entity.WarningDetail;
 import com.tcsms.securityserver.Entity.WarningLog;
-import com.tcsms.securityserver.Exception.SendWarningFailedException;
 import com.tcsms.securityserver.Service.ServiceImp.RedisServiceImp;
 import com.tcsms.securityserver.Service.ServiceImp.RestTemplateServiceImp;
+import org.gavaghan.geodesy.Ellipsoid;
+import org.gavaghan.geodesy.GeodeticCalculator;
+import org.gavaghan.geodesy.GlobalCoordinates;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -18,10 +22,10 @@ import java.util.Optional;
 public abstract class TcsmsMonitor extends Thread {
 
     private String threadName;
-    protected RestTemplateServiceImp restTemplateServiceImp;
+    RestTemplateServiceImp restTemplateServiceImp;
     protected RedisServiceImp redisServiceImp;
-    protected final static long SLEEP_TIME = 500;
-    private int lastOperationLogHashCode = 0;
+    final static long SLEEP_TIME = 500;
+    private int lastOperationLogHashCode;
     private boolean pause = false;
     private int notRunningTimes;
 
@@ -47,6 +51,28 @@ public abstract class TcsmsMonitor extends Thread {
             this.pause = false;
             this.notify();
         }
+    }
+
+    public static boolean isCompleteSafe(DeviceRegistry device1, DeviceRegistry device2) {
+        GlobalCoordinates source = new GlobalCoordinates(device1.getLatitude(), device1.getLongitude());
+        GlobalCoordinates target = new GlobalCoordinates(device2.getLatitude(), device2.getLongitude());
+        GeodeticCalculator geodeticCalculator = new GeodeticCalculator();
+        double distance = geodeticCalculator.calculateGeodeticCurve(Ellipsoid.Sphere, source, target).getEllipsoidalDistance();
+        if (device1.getBigLength() + device2.getBigLength() < distance) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isCompleteSafe(DeviceRegistry device, BuildingRegistry building) {
+        GlobalCoordinates source = new GlobalCoordinates(device.getLatitude(), device.getLongitude());
+        GlobalCoordinates target = new GlobalCoordinates(building.getLatitude(), building.getLongitude());
+        GeodeticCalculator geodeticCalculator = new GeodeticCalculator();
+        double distance = geodeticCalculator.calculateGeodeticCurve(Ellipsoid.Sphere, source, target).getEllipsoidalDistance();
+        if (device.getBigLength() + building.getLength() < distance) {
+            return true;
+        }
+        return false;
     }
 
 

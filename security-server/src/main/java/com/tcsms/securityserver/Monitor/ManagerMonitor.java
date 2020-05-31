@@ -7,7 +7,6 @@ import com.tcsms.securityserver.Service.ServiceImp.RedisServiceImp;
 import com.tcsms.securityserver.Service.ServiceImp.RestTemplateServiceImp;
 import com.tcsms.securityserver.Utils.SpringUtil;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -51,7 +50,13 @@ public class ManagerMonitor extends TcsmsMonitor {
                                 MonitorManager.notifyMonitorByName(otherMonitor.getThreadName());
                                 otherMonitor.setNotRunningTimes(0);
                             }
-
+                        } else if (monitor instanceof BuildingCollisionMonitor) {
+                            log.info("OtherMonitor-------------");
+                            BuildingCollisionMonitor buildingCollisionMonitor = (BuildingCollisionMonitor) monitor;
+                            if (buildingCollisionMonitor.isRunningWhenPause()) {
+                                MonitorManager.notifyMonitorByName(buildingCollisionMonitor.getThreadName());
+                                buildingCollisionMonitor.setNotRunningTimes(0);
+                            }
                         }
                     }
                 }

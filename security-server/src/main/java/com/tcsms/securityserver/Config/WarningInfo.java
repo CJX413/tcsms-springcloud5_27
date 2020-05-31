@@ -14,6 +14,8 @@ public enum WarningInfo {
     WIND_VELOCITY_YELLOW_WARNING(504, "黄色四级大风黄色警报!"),
     WIND_VELOCITY_RED_WARNING(505, "红色六级大风红色警报!"),
     OPERATOR_RED_WARNING(506, "未注册的驾驶员红色警报!"),
+    BUILDING_COLLISION_YELLOW_WARNING(507, "设备与建筑物间碰撞黄色警报!"),
+    BUILDING_COLLISION_RED_WARNING(508, "设备与建筑物间碰撞红色警报!"),
 
     ;
     private int code;

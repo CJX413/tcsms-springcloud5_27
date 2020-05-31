@@ -1,6 +1,7 @@
 package com.tcsms.securityserver.Controller;
 
 
+import com.tcsms.securityserver.AOP.ReceiveOperationLogAop;
 import com.tcsms.securityserver.JSON.ResultJSON;
 import com.tcsms.securityserver.Monitor.MonitorManager;
 import com.tcsms.securityserver.Service.ServiceImp.SecurityServiceImp;
@@ -22,6 +23,7 @@ public class SecurityController {
             MonitorManager.shutDownAllMonitor();
             securityServiceImp.openManagerMonitor();
             securityServiceImp.openDeviceCollisionMonitor();
+            securityServiceImp.openBuildingCollisionMonitor();
             securityServiceImp.openOtherMonitor();
             MonitorManager.turn_on = true;
         } catch (RuntimeException e) {
@@ -57,6 +59,7 @@ public class SecurityController {
             MonitorManager.shutDownAllMonitor();
             securityServiceImp.openManagerMonitor();
             securityServiceImp.openDeviceCollisionMonitor();
+            securityServiceImp.openBuildingCollisionMonitor();
             securityServiceImp.openOtherMonitor();
             MonitorManager.turn_on = true;
         } catch (RuntimeException e) {
@@ -77,15 +80,10 @@ public class SecurityController {
                 (200, true, "获取安全监控系统状态成功！", MonitorManager.getMonitorStatus()).toString();
     }
 
-//    @RequestMapping("/notifyMonitor")
-//    public String notifyMonitor() {
-//        MonitorManager.notifyAllMonitor();
-//        return "唤醒所有监听器";
-//    }
-
-    @RequestMapping("test")
-    public String test() {
-        return "------------------";
+    @RequestMapping("/workLevel")
+    public String workLevel() {
+        return new ResultJSON(200, true, "获取工作等级成功！", ReceiveOperationLogAop.getWorkLevel()).toString();
     }
+
 
 }

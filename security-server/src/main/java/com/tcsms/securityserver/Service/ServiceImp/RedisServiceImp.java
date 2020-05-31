@@ -18,10 +18,19 @@ public class RedisServiceImp implements RedisService {
         return jedisPool.getResource();
     }
 
-    public void setex(String key, String value) {
+    public void setex(String key, int seconds, String value) {
         Jedis jedis = getJedis();
         try {
-            jedis.setex(key, live, value);
+            jedis.setex(key, seconds, value);
+        } finally {
+            jedis.close();
+        }
+    }
+
+    public byte[] get(byte[] key) {
+        Jedis jedis = getJedis();
+        try {
+            return jedis.get(key);
         } finally {
             jedis.close();
         }

@@ -1131,403 +1131,557 @@
     <table id="285" parent="12" name="building_registry"/>
     <table id="286" parent="12" name="device_registry"/>
     <table id="287" parent="12" name="environment"/>
-    <table id="288" parent="12" name="invitation_code"/>
-    <table id="289" parent="12" name="online_log"/>
-    <table id="290" parent="12" name="operation_log"/>
-    <table id="291" parent="12" name="operator"/>
-    <table id="292" parent="12" name="operator_apply"/>
-    <table id="293" parent="12" name="role_apply"/>
-    <table id="294" parent="12" name="user"/>
-    <table id="295" parent="12" name="user_info"/>
-    <table id="296" parent="12" name="warning_detail"/>
-    <table id="297" parent="12" name="warning_log"/>
-    <table id="298" parent="12" name="warning_ranking"/>
-    <column id="299" parent="285" name="buildingId">
+    <table id="288" parent="12" name="online_log"/>
+    <table id="289" parent="12" name="operation_log"/>
+    <table id="290" parent="12" name="operation_log_2020_05_28"/>
+    <table id="291" parent="12" name="operation_log_backup"/>
+    <table id="292" parent="12" name="operator"/>
+    <table id="293" parent="12" name="operator_apply"/>
+    <table id="294" parent="12" name="role_apply"/>
+    <table id="295" parent="12" name="user"/>
+    <table id="296" parent="12" name="user_info"/>
+    <table id="297" parent="12" name="warning_detail"/>
+    <table id="298" parent="12" name="warning_log"/>
+    <table id="299" parent="12" name="warning_ranking"/>
+    <column id="300" parent="285" name="buildingId">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="300" parent="285" name="pointOneLat">
+    <column id="301" parent="285" name="length">
       <Position>2</Position>
-      <DataType>double(10,6 digit)|0s</DataType>
+      <DataType>double(5,2 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="301" parent="285" name="pointOneLng">
+    <column id="302" parent="285" name="height">
       <Position>3</Position>
-      <DataType>double(10,6 digit)|0s</DataType>
+      <DataType>double(5,2 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="302" parent="285" name="pointTwoLat">
+    <column id="303" parent="285" name="longitude">
       <Position>4</Position>
       <DataType>double(10,6 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="303" parent="285" name="pointTwoLng">
+    <column id="304" parent="285" name="latitude">
       <Position>5</Position>
       <DataType>double(10,6 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="304" parent="285" name="pointThreeLat">
-      <Position>6</Position>
-      <DataType>double(10,6 digit)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="305" parent="285" name="pointThreeLng">
-      <Position>7</Position>
-      <DataType>double(10,6 digit)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="306" parent="285" name="pointFourLat">
-      <Position>8</Position>
-      <DataType>double(10,6 digit)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="307" parent="285" name="pointFourLng">
-      <Position>9</Position>
-      <DataType>double(10,6 digit)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="308" parent="285" name="height">
-      <Position>10</Position>
-      <DataType>double(5,2 digit)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <key id="309" parent="285" name="PRIMARY">
+    <key id="305" parent="285" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>buildingId</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="310" parent="286" name="isRegistered">
+    <column id="306" parent="286" name="isRegistered">
       <Position>1</Position>
       <DataType>tinyint(1)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="311" parent="286" name="deviceModel">
+    <column id="307" parent="286" name="deviceModel">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="312" parent="286" name="deviceId">
+    <column id="308" parent="286" name="deviceId">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="313" parent="286" name="longitude">
+    <column id="309" parent="286" name="longitude">
       <Position>4</Position>
       <DataType>double(10,6 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="314" parent="286" name="latitude">
+    <column id="310" parent="286" name="latitude">
       <Position>5</Position>
       <DataType>double(10,6 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="315" parent="286" name="rlt">
+    <column id="311" parent="286" name="rlt">
       <Position>6</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="316" parent="286" name="bigHeight">
+    <column id="312" parent="286" name="bigHeight">
       <Position>7</Position>
       <DataType>double(5,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="317" parent="286" name="smallHeight">
+    <column id="313" parent="286" name="smallHeight">
       <Position>8</Position>
       <DataType>double(5,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="318" parent="286" name="bigLength">
+    <column id="314" parent="286" name="bigLength">
       <Position>9</Position>
       <DataType>double(5,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="319" parent="286" name="smallLength">
+    <column id="315" parent="286" name="smallLength">
       <Position>10</Position>
       <DataType>double(5,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="320" parent="286" name="PRIMARY">
+    <key id="316" parent="286" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>deviceId</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="321" parent="287" name="invitationCode">
+    <column id="317" parent="287" name="invitationCode">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
-      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="322" parent="287" name="id">
+    <column id="318" parent="287" name="id">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;1&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="323" parent="287" name="centerLat">
+    <column id="319" parent="287" name="centerLat">
       <Position>3</Position>
       <DataType>double(10,6 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="324" parent="287" name="centerLng">
+    <column id="320" parent="287" name="centerLng">
       <Position>4</Position>
       <DataType>double(10,6 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="325" parent="287" name="PRIMARY">
+    <key id="321" parent="287" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="326" parent="288" name="code">
+    <column id="322" parent="288" name="deviceId">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="327" parent="288" name="id">
-      <Position>2</Position>
-      <DataType>int(11)|0s</DataType>
-      <NotNull>1</NotNull>
-      <DefaultExpression>&apos;1&apos;</DefaultExpression>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <key id="328" parent="288" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="329" parent="289" name="deviceId">
-      <Position>1</Position>
-      <DataType>varchar(255)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="330" parent="289" name="startTime">
+    <column id="323" parent="288" name="startTime">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="331" parent="289" name="endTime">
+    <column id="324" parent="288" name="endTime">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="332" parent="289" name="version">
+    <column id="325" parent="288" name="version">
       <Position>4</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="333" parent="289" name="deviceId">
+    <index id="326" parent="288" name="deviceId">
       <ColNames>deviceId</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="334" parent="289" name="startTime">
+    <index id="327" parent="288" name="startTime">
       <ColNames>startTime</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="335" parent="289" name="endTime">
+    <index id="328" parent="288" name="endTime">
       <ColNames>endTime</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="336" parent="289" name="PRIMARY">
+    <key id="329" parent="288" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>version</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="337" parent="290" name="deviceModel">
+    <column id="330" parent="289" name="deviceModel">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="338" parent="290" name="deviceId">
+    <column id="331" parent="289" name="deviceId">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="339" parent="290" name="operator">
+    <column id="332" parent="289" name="operator">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="340" parent="290" name="workerId">
+    <column id="333" parent="289" name="workerId">
       <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="341" parent="290" name="time">
+    <column id="334" parent="289" name="time">
       <Position>5</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="342" parent="290" name="longitude">
+    <column id="335" parent="289" name="longitude">
       <Position>6</Position>
       <DataType>double(10,6 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="343" parent="290" name="latitude">
+    <column id="336" parent="289" name="latitude">
       <Position>7</Position>
       <DataType>double(10,6 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="344" parent="290" name="radius">
+    <column id="337" parent="289" name="radius">
       <Position>8</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="345" parent="290" name="angle">
+    <column id="338" parent="289" name="angle">
       <Position>9</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="346" parent="290" name="height">
+    <column id="339" parent="289" name="height">
       <Position>10</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="347" parent="290" name="torque">
+    <column id="340" parent="289" name="torque">
       <Position>11</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="348" parent="290" name="weight">
+    <column id="341" parent="289" name="weight">
       <Position>12</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="349" parent="290" name="windVelocity">
+    <column id="342" parent="289" name="windVelocity">
       <Position>13</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="350" parent="290" name="magnification">
+    <column id="343" parent="289" name="magnification">
       <Position>14</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="351" parent="290" name="id">
+    <column id="344" parent="289" name="id">
       <Position>15</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="352" parent="290" name="time">
+    <index id="345" parent="289" name="time">
       <ColNames>time</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="353" parent="290" name="PRIMARY">
+    <key id="346" parent="289" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id
 deviceId</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="354" parent="291" name="username">
+    <column id="347" parent="290" name="deviceModel">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="355" parent="291" name="specialOperationCertificateNumber">
+    <column id="348" parent="290" name="deviceId">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="356" parent="291" name="name">
+    <column id="349" parent="290" name="operator">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="357" parent="291" name="workerId">
+    <column id="350" parent="290" name="workerId">
       <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="358" parent="291" name="specialOperationCertificateNumber">
+    <column id="351" parent="290" name="time">
+      <Position>5</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="352" parent="290" name="longitude">
+      <Position>6</Position>
+      <DataType>double(10,6 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="353" parent="290" name="latitude">
+      <Position>7</Position>
+      <DataType>double(10,6 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="354" parent="290" name="radius">
+      <Position>8</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="355" parent="290" name="angle">
+      <Position>9</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="356" parent="290" name="height">
+      <Position>10</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="357" parent="290" name="torque">
+      <Position>11</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="358" parent="290" name="weight">
+      <Position>12</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="359" parent="290" name="windVelocity">
+      <Position>13</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="360" parent="290" name="magnification">
+      <Position>14</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="361" parent="290" name="id">
+      <Position>15</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="362" parent="290" name="time">
+      <ColNames>time</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="363" parent="290" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id
+deviceId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="364" parent="291" name="deviceModel">
+      <Position>1</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="365" parent="291" name="deviceId">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="366" parent="291" name="operator">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="367" parent="291" name="workerId">
+      <Position>4</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="368" parent="291" name="time">
+      <Position>5</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="369" parent="291" name="longitude">
+      <Position>6</Position>
+      <DataType>double(10,6 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="370" parent="291" name="latitude">
+      <Position>7</Position>
+      <DataType>double(10,6 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="371" parent="291" name="radius">
+      <Position>8</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="372" parent="291" name="angle">
+      <Position>9</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="373" parent="291" name="height">
+      <Position>10</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="374" parent="291" name="torque">
+      <Position>11</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="375" parent="291" name="weight">
+      <Position>12</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="376" parent="291" name="windVelocity">
+      <Position>13</Position>
+      <DataType>double(11,2 digit)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="377" parent="291" name="magnification">
+      <Position>14</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="378" parent="291" name="id">
+      <Position>15</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="379" parent="291" name="time">
+      <ColNames>time</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="380" parent="291" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id
+deviceId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="381" parent="292" name="username">
+      <Position>1</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="382" parent="292" name="specialOperationCertificateNumber">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="383" parent="292" name="name">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="384" parent="292" name="workerId">
+      <Position>4</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="385" parent="292" name="specialOperationCertificateNumber">
       <ColNames>specialOperationCertificateNumber</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="359" parent="291" name="workerId">
+    <index id="386" parent="292" name="workerId">
       <ColNames>workerId</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="360" parent="291" name="PRIMARY">
+    <key id="387" parent="292" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>username</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="361" parent="291" name="specialOperationCertificateNumber">
+    <key id="388" parent="292" name="specialOperationCertificateNumber">
       <ColNames>specialOperationCertificateNumber</ColNames>
       <UnderlyingIndexName>specialOperationCertificateNumber</UnderlyingIndexName>
     </key>
-    <key id="362" parent="291" name="workerId">
+    <key id="389" parent="292" name="workerId">
       <ColNames>workerId</ColNames>
       <UnderlyingIndexName>workerId</UnderlyingIndexName>
     </key>
-    <column id="363" parent="292" name="username">
+    <column id="390" parent="293" name="username">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="364" parent="292" name="specialOperationCertificateNumber">
+    <column id="391" parent="293" name="specialOperationCertificateNumber">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="365" parent="292" name="name">
+    <column id="392" parent="293" name="name">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="366" parent="292" name="workerId">
+    <column id="393" parent="293" name="workerId">
       <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="367" parent="292" name="createTime">
+    <column id="394" parent="293" name="createTime">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
@@ -1535,24 +1689,24 @@ deviceId</ColNames>
       <ColumnKind>normal</ColumnKind>
       <OnUpdate>CURRENT_TIMESTAMP</OnUpdate>
     </column>
-    <key id="368" parent="292" name="PRIMARY">
+    <key id="395" parent="293" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>username</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="369" parent="293" name="username">
+    <column id="396" parent="294" name="username">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="370" parent="293" name="role">
+    <column id="397" parent="294" name="role">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="371" parent="293" name="createTime">
+    <column id="398" parent="294" name="createTime">
       <Position>3</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
@@ -1560,271 +1714,271 @@ deviceId</ColNames>
       <ColumnKind>normal</ColumnKind>
       <OnUpdate>CURRENT_TIMESTAMP</OnUpdate>
     </column>
-    <key id="372" parent="293" name="PRIMARY">
+    <key id="399" parent="294" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>username</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="373" parent="294" name="username">
+    <column id="400" parent="295" name="username">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
       <Collation>utf8_croatian_ci</Collation>
     </column>
-    <column id="374" parent="294" name="password">
+    <column id="401" parent="295" name="password">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="375" parent="294" name="role">
+    <column id="402" parent="295" name="role">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="376" parent="294" name="PRIMARY">
+    <key id="403" parent="295" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>username</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="377" parent="294" name="username">
+    <foreign-key id="404" parent="295" name="username">
       <ColNames>username</ColNames>
       <RefSchemaName>tcsmsdb</RefSchemaName>
       <RefTableName>user_info</RefTableName>
       <RefColNames>username</RefColNames>
     </foreign-key>
-    <column id="378" parent="295" name="username">
+    <column id="405" parent="296" name="username">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
       <Collation>utf8_croatian_ci</Collation>
     </column>
-    <column id="379" parent="295" name="name">
+    <column id="406" parent="296" name="name">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="380" parent="295" name="workerId">
+    <column id="407" parent="296" name="workerId">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="381" parent="295" name="phoneNumber">
+    <column id="408" parent="296" name="phoneNumber">
       <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="382" parent="295" name="sex">
+    <column id="409" parent="296" name="sex">
       <Position>5</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;男&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="383" parent="295" name="workerId">
+    <index id="410" parent="296" name="workerId">
       <ColNames>workerId</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="384" parent="295" name="phoneNumber">
+    <index id="411" parent="296" name="phoneNumber">
       <ColNames>phoneNumber</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="385" parent="295" name="PRIMARY">
+    <key id="412" parent="296" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>username</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="386" parent="295" name="workerId">
+    <key id="413" parent="296" name="workerId">
       <ColNames>workerId</ColNames>
       <UnderlyingIndexName>workerId</UnderlyingIndexName>
     </key>
-    <key id="387" parent="295" name="phoneNumber">
+    <key id="414" parent="296" name="phoneNumber">
       <ColNames>phoneNumber</ColNames>
       <UnderlyingIndexName>phoneNumber</UnderlyingIndexName>
     </key>
-    <column id="388" parent="296" name="deviceModel">
+    <column id="415" parent="297" name="deviceModel">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="389" parent="296" name="deviceId">
+    <column id="416" parent="297" name="deviceId">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="390" parent="296" name="operator">
+    <column id="417" parent="297" name="operator">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="391" parent="296" name="workerId">
+    <column id="418" parent="297" name="workerId">
       <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="392" parent="296" name="time">
+    <column id="419" parent="297" name="time">
       <Position>5</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="393" parent="296" name="longitude">
+    <column id="420" parent="297" name="longitude">
       <Position>6</Position>
       <DataType>double(10,6 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="394" parent="296" name="latitude">
+    <column id="421" parent="297" name="latitude">
       <Position>7</Position>
       <DataType>double(10,6 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="395" parent="296" name="radius">
+    <column id="422" parent="297" name="radius">
       <Position>8</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="396" parent="296" name="angle">
+    <column id="423" parent="297" name="angle">
       <Position>9</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="397" parent="296" name="height">
+    <column id="424" parent="297" name="height">
       <Position>10</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="398" parent="296" name="torque">
+    <column id="425" parent="297" name="torque">
       <Position>11</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="399" parent="296" name="weight">
+    <column id="426" parent="297" name="weight">
       <Position>12</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="400" parent="296" name="windVelocity">
+    <column id="427" parent="297" name="windVelocity">
       <Position>13</Position>
       <DataType>double(11,2 digit)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="401" parent="296" name="magnification">
+    <column id="428" parent="297" name="magnification">
       <Position>14</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="402" parent="296" name="id">
+    <column id="429" parent="297" name="id">
       <Position>15</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="403" parent="296" name="warningId">
+    <column id="430" parent="297" name="warningId">
       <Position>16</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="404" parent="296" name="deviceId">
+    <index id="431" parent="297" name="deviceId">
       <ColNames>deviceId</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="405" parent="296" name="time">
+    <index id="432" parent="297" name="time">
       <ColNames>time</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="406" parent="296" name="warningId">
+    <index id="433" parent="297" name="warningId">
       <ColNames>warningId</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="407" parent="296" name="PRIMARY">
+    <key id="434" parent="297" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="408" parent="296" name="warningId">
+    <foreign-key id="435" parent="297" name="warningId">
       <ColNames>warningId</ColNames>
       <RefSchemaName>tcsmsdb</RefSchemaName>
       <RefTableName>warning_log</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="409" parent="297" name="id">
+    <column id="436" parent="298" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="410" parent="297" name="code">
+    <column id="437" parent="298" name="code">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="411" parent="297" name="message">
+    <column id="438" parent="298" name="message">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="412" parent="297" name="time">
+    <column id="439" parent="298" name="time">
       <Position>4</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="413" parent="297" name="code">
+    <index id="440" parent="298" name="code">
       <ColNames>code</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="414" parent="297" name="time">
+    <index id="441" parent="298" name="time">
       <ColNames>time</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="415" parent="297" name="PRIMARY">
+    <key id="442" parent="298" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="416" parent="298" name="deviceId">
+    <column id="443" parent="299" name="deviceId">
       <Position>1</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="417" parent="298" name="redWarning">
+    <column id="444" parent="299" name="redWarning">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="418" parent="298" name="yellowWarning">
+    <column id="445" parent="299" name="yellowWarning">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="419" parent="298" name="rankingCount">
+    <column id="446" parent="299" name="rankingCount">
       <Position>4</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="420" parent="298" name="PRIMARY">
+    <key id="447" parent="299" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>deviceId</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="421" parent="298" name="deviceId">
+    <foreign-key id="448" parent="299" name="deviceId">
       <ColNames>deviceId</ColNames>
       <RefSchemaName>tcsmsdb</RefSchemaName>
       <RefTableName>device_registry</RefTableName>

@@ -42,6 +42,10 @@ public class DeviceCollisionMonitor extends TcsmsMonitor {
     private Double bigHeight_2;
     private Double bigLength_2;
 
+    private Double safe_bigLength_1;
+    private Double safe_bigLength_2;
+
+    private Gson gson = new Gson();
 
     public DeviceCollisionMonitor(DeviceRegistry device_1, DeviceRegistry device_2) {
         super(THREAD_PREFIX + device_1.getDeviceId() + "-" + device_2.getDeviceId());
@@ -51,6 +55,8 @@ public class DeviceCollisionMonitor extends TcsmsMonitor {
         this.bigLength_1 = device_1.getBigLength();
         this.bigHeight_2 = device_2.getBigHeight();
         this.bigLength_2 = device_2.getBigLength();
+        this.safe_bigLength_1 = bigLength_1 + SAFE_DISTANCE;
+        this.safe_bigLength_2 = bigLength_2 + SAFE_DISTANCE;
         this.distance = getDistance();
         this.bearing = getBearing();
 
@@ -59,6 +65,13 @@ public class DeviceCollisionMonitor extends TcsmsMonitor {
     public double getDistance() {
         GlobalCoordinates source = new GlobalCoordinates(device_1.getLatitude(), device_1.getLongitude());
         GlobalCoordinates target = new GlobalCoordinates(device_2.getLatitude(), device_2.getLongitude());
+        GeodeticCalculator geodeticCalculator = new GeodeticCalculator();
+        return geodeticCalculator.calculateGeodeticCurve(Ellipsoid.Sphere, source, target).getEllipsoidalDistance();
+    }
+
+    private double getDistance(double[] sourcePoint, double[] targetPoint) {
+        GlobalCoordinates source = new GlobalCoordinates(sourcePoint[0], sourcePoint[1]);
+        GlobalCoordinates target = new GlobalCoordinates(targetPoint[0], targetPoint[2]);
         GeodeticCalculator geodeticCalculator = new GeodeticCalculator();
         return geodeticCalculator.calculateGeodeticCurve(Ellipsoid.Sphere, source, target).getEllipsoidalDistance();
     }
@@ -79,44 +92,69 @@ public class DeviceCollisionMonitor extends TcsmsMonitor {
         return (Math.toDegrees(Math.atan2(y, x)) + 360) % 360;
     }
 
-    public boolean isCompleteSafe() {
-        if (bigLength_1 + bigLength_2 < distance) {
-            return true;
-        }
-        return false;
+
+    /**
+     * 0:为Latitude(纬度)
+     * 1:为Longitude(经度)
+     *
+     * @param angle
+     * @param longitude
+     * @param latitude
+     * @param radius
+     * @return
+     */
+    public double[] formRadiusToCoordinate(double angle, double longitude, double latitude, double radius) {
+        //将距离转换成经纬度的计算公式
+        double P = radius / 6371e3;
+        // 转换为radian，否则结果会不正确
+        angle = Math.toRadians(angle);
+        longitude = Math.toRadians(longitude);
+        latitude = Math.toRadians(latitude);
+
+        double latPoint = Math.asin(Math.sin(latitude) * Math.cos(P) + Math.cos(latitude) * Math.sin(P) * Math.cos(angle));
+        double lonPoint = longitude + Math.atan2(Math.sin(angle) * Math.sin(P) * Math.cos(latitude), Math.cos(P) - Math.sin(latitude) * Math.sin(latPoint));
+        // 转为正常的10进制经纬度
+
+        lonPoint = Math.toDegrees(lonPoint);
+        latPoint = Math.toDegrees(latPoint);
+        double[] point = new double[2];
+        point[0] = latPoint;
+        point[1] = lonPoint;
+        return point;
     }
 
     @Override
     List<WarningInfo> isWarning() {
         List<WarningInfo> warning = new ArrayList<>();
-        double Ox2 = distance * Math.cos((bearing / 180) * Math.PI);
-        double Oy2 = distance * Math.sin((bearing / 180) * Math.PI);
-        double safe_r1 = bigLength_1 + SAFE_DISTANCE;
-        double safe_r2 = bigLength_2 + SAFE_DISTANCE;
-        double r1 = bigLength_1;
-        double r2 = bigLength_2;
-        double x1 = operationLog_device_1.getRadius() * Math.cos((operationLog_device_1.getAngle() / 180) * Math.PI);
-        double y1 = operationLog_device_1.getRadius() * Math.sin((operationLog_device_1.getAngle() / 180) * Math.PI);
-        double x2 = operationLog_device_2.getRadius() * Math.cos((operationLog_device_2.getAngle() / 180) * Math.PI) + Ox2;
-        double y2 = operationLog_device_2.getRadius() * Math.sin((operationLog_device_2.getAngle() / 180) * Math.PI) + Oy2;
-        double p1toO2 = Math.sqrt((x1 - Ox2) * (x1 - Ox2) + (y1 - Oy2) * (y1 - Oy2));
-        double p2toO1 = Math.sqrt(x2 * x2 + y2 * y2);
-        if (p1toO2 < safe_r2 && p2toO1 < safe_r1) {
+        double[] pointOne = formRadiusToCoordinate(operationLog_device_1.getAngle(),
+                operationLog_device_1.getLongitude(), operationLog_device_1.getLatitude(),
+                operationLog_device_1.getRadius());
+        double[] pointTwo = formRadiusToCoordinate(operationLog_device_2.getAngle(),
+                operationLog_device_2.getLongitude(), operationLog_device_2.getLatitude(),
+                operationLog_device_2.getRadius());
+        double[] O1 = new double[]{operationLog_device_1.getLatitude(), operationLog_device_1.getLongitude()};
+        double[] O2 = new double[]{operationLog_device_2.getLatitude(), operationLog_device_2.getLongitude()};
+        double p1toO2 = getDistance(pointOne, O2);
+        double p2toO1 = getDistance(pointTwo, O1);
+
+        if (p1toO2 < safe_bigLength_2 && p2toO1 < safe_bigLength_1) {
             warning.add(WarningInfo.DEVICE_COLLISION_YELLOW_WARNING);
-        } else if ((p1toO2 < safe_r2 && p2toO1 > safe_r1) && (bigHeight_1 > bigHeight_2)) {
+        } else if ((p1toO2 < safe_bigLength_2 && p2toO1 > safe_bigLength_1) && (bigHeight_1 > bigHeight_2)) {
             warning.add(WarningInfo.DEVICE_COLLISION_YELLOW_WARNING);
-        } else if ((p1toO2 > safe_r2 && p2toO1 < safe_r1) && (bigHeight_1 < bigHeight_2)) {
+        } else if ((p1toO2 > safe_bigLength_2 && p2toO1 < safe_bigLength_1) && (bigHeight_1 < bigHeight_2)) {
             warning.add(WarningInfo.DEVICE_COLLISION_YELLOW_WARNING);
         }
-        if (p1toO2 < r2 && p2toO1 < r1) {
+        if (p1toO2 < bigLength_2 && p2toO1 < bigLength_1) {
             warning.add(WarningInfo.DEVICE_COLLISION_RED_WARNING);
-        } else if ((p1toO2 < r2 && p2toO1 > r1) && (bigHeight_1 > bigHeight_2)) {
+        } else if ((p1toO2 < bigLength_2 && p2toO1 > bigLength_1) && (bigHeight_1 > bigHeight_2)) {
             warning.add(WarningInfo.DEVICE_COLLISION_RED_WARNING);
-        } else if ((p1toO2 > r2 && p2toO1 < r1) && (bigHeight_1 < bigHeight_2)) {
+        } else if ((p1toO2 > bigLength_2 && p2toO1 < bigLength_1) && (bigHeight_1 < bigHeight_2)) {
             warning.add(WarningInfo.DEVICE_COLLISION_RED_WARNING);
         }
         return warning;
     }
+
+
 
     @Override
     public void run() {
@@ -124,7 +162,6 @@ public class DeviceCollisionMonitor extends TcsmsMonitor {
         restTemplateServiceImp = SpringUtil.getBean(RestTemplateServiceImp.class);
         Jedis jedis = redisServiceImp.getJedis();
         try {
-            Gson gson = new Gson();
             while (!Thread.interrupted()) {
                 isWait();
                 log.info(device_1.getDeviceId() + device_2.getDeviceId() + "正在运行--------------");
@@ -192,7 +229,7 @@ public class DeviceCollisionMonitor extends TcsmsMonitor {
      */
     @Override
     public boolean isRunningWhenPause() {
-        Gson gson = new Gson();
+
         int hashCode = 0;
         String value1 = redisServiceImp.get(device_1.getDeviceId());
         String value2 = redisServiceImp.get(device_2.getDeviceId());

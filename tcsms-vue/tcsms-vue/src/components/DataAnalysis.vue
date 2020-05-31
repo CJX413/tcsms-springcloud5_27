@@ -24,12 +24,30 @@
           placeholder="选择日期">
         </el-date-picker>
       </el-col>
-      <el-col :span="2" :offset="15">
+      <el-col :span="2" :offset="13">
+        <el-popover
+          placement="right"
+          width="200"
+          trigger="click">
+          <el-table :data="workLevelData" height="500">
+            <el-table-column
+              label="设备名"
+              prop="deviceId">
+            </el-table-column>
+            <el-table-column
+              label="工作等级"
+              prop="level">
+            </el-table-column>
+          </el-table>
+          <el-button slot="reference" size="mini" type="primary" @click="workLevel" plain>工作等级</el-button>
+        </el-popover>
+      </el-col>
+      <el-col :span="2">
         <el-popover
           placement="right"
           width="600"
           trigger="click">
-          <el-table :data="tableData" height="500">
+          <el-table :data="warningRankingData" height="500">
             <el-table-column
               label="设备名"
               prop="deviceId">
@@ -98,7 +116,8 @@
         date: '',
         device: null,
         deviceList: [],
-        tableData: [],
+        workLevelData: [],
+        warningRankingData: [],
         option: {
           title: {
             text: '',
@@ -392,11 +411,21 @@
         this.axios.post('/warningRanking', {})
           .then((response) => {
             if (response.data.success === true) {
-              this.tableData = response.data.result;
+              this.warningRankingData = response.data.result;
               console.log(response.data.result);
             }
           });
       },
+      workLevel(){
+        this.axios.post('/workLevel', {})
+          .then((response) => {
+            console.log(response.data);
+            if (response.data.success === true) {
+              this.workLevelData = response.data.result;
+              console.log(response.data.result);
+            }
+          });
+      }
     },
   }
 </script>

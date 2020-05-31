@@ -7,7 +7,6 @@ import com.tcsms.securityserver.Config.WarningInfo;
 import com.tcsms.securityserver.Entity.OperationLog;
 import com.tcsms.securityserver.Entity.WarningDetail;
 import com.tcsms.securityserver.Entity.WarningLog;
-import com.tcsms.securityserver.Exception.SendWarningFailedException;
 import com.tcsms.securityserver.Monitor.MonitorManager;
 import com.tcsms.securityserver.Service.ServiceImp.RestTemplateServiceImp;
 import lombok.extern.log4j.Log4j2;
@@ -29,7 +28,7 @@ public class TestController {
     RestTemplateServiceImp restTemplateServiceImp;
 
     @RequestMapping("/test/sendWarning")
-    public String send() throws SendWarningFailedException, InterruptedException {
+    public String send() throws InterruptedException {
         WarningInfo[] Warning = {
 
                 WarningInfo.OPERATOR_RED_WARNING,
@@ -54,7 +53,7 @@ public class TestController {
         return "发送一次警报";
     }
 
-    void sendWarning(WarningInfo warningInfo, JsonArray data) throws SendWarningFailedException {
+    void sendWarning(WarningInfo warningInfo, JsonArray data) {
         WarningLog warningLog = new WarningLog();
         warningLog.setCode(warningInfo.getCode());
         warningLog.setMessage(warningInfo.getMsg());

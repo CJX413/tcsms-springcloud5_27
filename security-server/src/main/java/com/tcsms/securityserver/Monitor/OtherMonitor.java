@@ -16,8 +16,6 @@ import redis.clients.jedis.Jedis;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Log4j2
 public class OtherMonitor extends TcsmsMonitor {
@@ -32,6 +30,7 @@ public class OtherMonitor extends TcsmsMonitor {
 
     private Double rlt;
     private HashMap<String, String> operator;
+    private Gson gson = new Gson();
 
     public OtherMonitor(DeviceRegistry device, HashMap<String, String> operator) {
         super(THREAD_PREFIX + device.getDeviceId());
@@ -46,7 +45,6 @@ public class OtherMonitor extends TcsmsMonitor {
         restTemplateServiceImp = SpringUtil.getBean(RestTemplateServiceImp.class);
         Jedis jedis = redisServiceImp.getJedis();
         try {
-            Gson gson = new Gson();
             while (!Thread.interrupted()) {
                 isWait();
                 log.info(device.getDeviceId() + "正在运行--------------");
@@ -132,7 +130,7 @@ public class OtherMonitor extends TcsmsMonitor {
      */
     @Override
     public boolean isRunningWhenPause() {
-        Gson gson = new Gson();
+
         int hashCode = 0;
         String value = redisServiceImp.get(device.getDeviceId());
         if (value != null) {

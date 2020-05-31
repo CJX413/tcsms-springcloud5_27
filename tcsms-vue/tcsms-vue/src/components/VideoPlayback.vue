@@ -195,7 +195,7 @@
         })
           .then(response => {
             if (response.data.success === false) {
-              this.utils.alertErrorMessage('获取全部设备的历史运行日志失败！', data.message)
+              this.utils.alertErrorMessage('获取全部设备的历史运行日志失败！', response.data.message)
 
             }
           });

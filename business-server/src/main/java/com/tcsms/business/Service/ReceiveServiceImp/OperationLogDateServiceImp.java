@@ -133,4 +133,27 @@ public class OperationLogDateServiceImp {
         return sqlMapper.countByDeviceIdOfOperationLogDate(deviceId, date);
     }
 
+    public boolean existsOperationLogDate(String time) throws ParseException {
+        Date datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(time);
+        String date = new SimpleDateFormat("yyyy_MM_dd").format(datetime);
+        if (new SimpleDateFormat("yyyy_MM_dd").format(new Date()).equals(date)) {
+            //当天的
+            return true;
+        } else {
+            //往天的
+            return sqlMapper.existsOperationLogDate(date) > 0;
+        }
+    }
+
+    public boolean existsOperationLogDateByDate(String date) throws ParseException {
+
+        if (new SimpleDateFormat("yyyy_MM_dd").format(new Date()).equals(date)) {
+            //当天的
+            return true;
+        } else {
+            //往天的
+            return sqlMapper.existsOperationLogDate(date) > 0;
+        }
+    }
+
 }

@@ -79,6 +79,9 @@ public class OperationLogController {
             JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
             String time = jsonObject.get("time").getAsString();
             log.info(time);
+            if (!operationLogDateServiceImp.existsOperationLogDate(time)) {
+                return new ResultJSON(200, false, "当天没有产生运行日志！", null).toString();
+            }
             webSocket.openAllOperationLogDateSendThread(name, time);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -98,6 +101,10 @@ public class OperationLogController {
             log.info(time);
             String token = request.getHeader("authorization");
             String name = JwtTokenUtils.getUsername(token);
+            log.info(time);
+            if (!operationLogDateServiceImp.existsOperationLogDate(time)) {
+                return new ResultJSON(200, false, "当天没有产生运行日志！", null).toString();
+            }
             webSocket.openOperationLogDateSendThread(name, deviceId, time);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -112,12 +119,14 @@ public class OperationLogController {
         JsonObject data = null;
         try {
             JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
-            log.info(jsonObject.get("date").getAsString());
             String now = new SimpleDateFormat("yyyy_MM_dd").format(new Date());
             String date = jsonObject.get("date").getAsString();
             String deviceId = jsonObject.get("deviceId").getAsString();
             String time = jsonObject.get("time").getAsString();
-            log.info(time);
+            log.info("获取{}的{}的折线图数据。", deviceId, time);
+            if (!operationLogDateServiceImp.existsOperationLogDateByDate(date)) {
+                return new ResultJSON(200, false, "当天没有产生运行日志！", null).toString();
+            }
             if (date.equals(now)) {
                 //查OperationLog表
                 data = operationLogServiceImp.getOperationLogByDeviceIdAndTime(deviceId, time);
@@ -125,7 +134,7 @@ public class OperationLogController {
                 //查OperationLogDate表
                 data = operationLogDateServiceImp.getOperationLogByDeviceIdAndDateAndTime(deviceId, date, time);
             }
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             log.info(e.getMessage());
             return new ResultJSON(200, false, JsonHelper.replaceIllegalChar(e.getMessage()), null).toString();
@@ -142,9 +151,11 @@ public class OperationLogController {
         String deviceId = jsonObject.get("deviceId").getAsString();
         String date = jsonObject.get("date").getAsString();//格式为yyyy_MM_dd
         String warningLogDate = date.replaceAll("_", "-");//格式为yyyy-MM-dd
-        log.info(deviceId + "---" + date);
+        log.info("获取{}的{}的饼图数据。", deviceId, date);
         try {
-            log.info(warningLogDate);
+            if (!operationLogDateServiceImp.existsOperationLogDateByDate(date)) {
+                return new ResultJSON(200, false, "当天没有产生运行日志！", null).toString();
+            }
             JsonArray data = warningLogServiceImp.countWarningLogByDeviceIdAndDate(deviceId, warningLogDate);
             log.info(data);
             int length;
@@ -155,7 +166,7 @@ public class OperationLogController {
             }
             result.addProperty("length", length);
             result.add("data", data);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResultJSON(200, false, JsonHelper.replaceIllegalChar(e.getMessage()), null).toString();
         }

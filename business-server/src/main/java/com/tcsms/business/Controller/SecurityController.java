@@ -37,4 +37,9 @@ public class SecurityController {
         return restTemplate.getForObject("http://security-server/monitorStatus", String.class);
     }
 
+    @RequestMapping("/workLevel")
+    public String workLevel() {
+        return restTemplate.getForObject("http://security-server/workLevel", String.class);
+    }
+
 }
