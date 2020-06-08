@@ -65,35 +65,23 @@ public class UserController {
         return new ResultJSON(200, true, "获取用户信息成功！", userInfo.toString()).toString();
     }
 
-    @RequestMapping("/role")
-    public String getRole(HttpServletRequest request) {
-        String token = request.getHeader("authorization");
-        String username = JwtTokenUtils.getUsername(token);
-        String role = userServiceImp.getDao().findByUsername(username).getRole();
-        return new ResultJSON(200, true, role, null).toString();
-    }
 
-    @RequestMapping("/applyMonitor")
-    public String applyMonitor(HttpServletRequest request) {
+    @RequestMapping("/applyRole")
+    public String applyRole(HttpServletRequest request, @RequestBody String json) {
         String token = request.getHeader("authorization");
         String username = JwtTokenUtils.getUsername(token);
+        String role = new Gson().fromJson(json, JsonObject.class).get("role").getAsString();
         try {
-            roleApplyServiceImp.applyMonitor(username);
-        } catch (RuntimeException e) {
+            RoleApply roleApply = new RoleApply();
+            roleApply.setRole(role);
+            roleApply.setUsername(username);
+            roleApplyServiceImp.applyRole(roleApply);
+        } catch (Exception e) {
             return new ResultJSON(200, false, JsonHelper.replaceIllegalChar(e.getMessage()), null).toString();
         }
         return new ResultJSON(200, true, "成功发出MONITOR权限申请！", null).toString();
     }
 
-    @RequestMapping("/isApplyRole")
-    public String isApplyRole(HttpServletRequest request) {
-        String token = request.getHeader("authorization");
-        String username = JwtTokenUtils.getUsername(token);
-        if (roleApplyServiceImp.isApplyRole(username)) {
-            return new ResultJSON(200, true, "true", null).toString();
-        }
-        return new ResultJSON(200, true, "false", null).toString();
-    }
 
     @RequestMapping("/allRoleApply")
     @PreAuthorize(value = "hasAnyAuthority('ADMIN')")
@@ -179,6 +167,20 @@ public class UserController {
             return new ResultJSON(200, false, JsonHelper.replaceIllegalChar(e.getMessage()), null).toString();
         }
         return new ResultJSON(200, true, "修改个人信息成功！", userInfo.toString()).toString();
+    }
+
+    @RequestMapping("/updatePhone")
+    public String updatePhone(@RequestBody String json, HttpServletRequest request) {
+        String token = request.getHeader("authorization");
+        String username = JwtTokenUtils.getUsername(token);
+        String phone = new Gson().fromJson(json, JsonObject.class).get("phone").getAsString();
+        String verificationCode = new Gson().fromJson(json, JsonObject.class).get("verificationCode").getAsString();
+        try {
+            userInfoServiceImp.updatePhone(username, phone, verificationCode);
+        } catch (Exception e) {
+            return new ResultJSON(200, false, JsonHelper.replaceIllegalChar(e.getMessage()), null).toString();
+        }
+        return new ResultJSON(200, true, "修改手机号成功！", null).toString();
     }
 
     @PreAuthorize(value = "hasAnyAuthority('ADMIN')")

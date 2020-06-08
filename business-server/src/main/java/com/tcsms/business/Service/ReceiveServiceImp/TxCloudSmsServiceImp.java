@@ -52,7 +52,8 @@ public class TxCloudSmsServiceImp {
     public static final int REGISTER_TEMPLATE_ID = 578632;
     // 修改短信模板ID，需要在短信应用中申请
     public static final int RESET_PWD_TEMPLATE_ID = 582540;
-    public static final int WARNING_TEMPLATE_ID = 582540;
+    public static final int UPDATE_PHONE_TEMPLATE_ID = 622372;
+    public static final int WARNING_TEMPLATE_ID = 582733;
 
     /**
      * 指定模板 ID 单发短信

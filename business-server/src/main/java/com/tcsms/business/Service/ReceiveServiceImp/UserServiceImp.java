@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Log4j2
@@ -30,11 +31,24 @@ public class UserServiceImp {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private RedisServiceImp redisServiceImp;
+    public static final HashSet<String> roleSet = new HashSet<String>() {{
+        add("ADMIN");
+        add("MONITOR");
+        add("USER");
+        add("SERVER");
+    }};
     public static final String ADMIN = "ADMIN";
     public static final String MONITOR = "MONITOR";
     public static final String USER = "USER";
     public static final String SERVER = "SERVER";
 
+    public String getRoleByUsername(String username) {
+        User user = userDao.findByUsername(username);
+        if (user == null) {
+            return "";
+        }
+        return user.getRole();
+    }
 
     public UserDao getDao() {
         return userDao;

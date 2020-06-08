@@ -25,7 +25,7 @@ public class WorkMapTask {
         redisServiceImp.delete(ReceiveOperationLogAop.workMapKey);
     }
 
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0 0 */1 * * ?")
     public void saveWorkMap() throws InterruptedException {
         try (Jedis jedis = redisServiceImp.getJedis()) {
             ConcurrentHashMap<String, Double> workMap = ReceiveOperationLogAop.getWorkMap();

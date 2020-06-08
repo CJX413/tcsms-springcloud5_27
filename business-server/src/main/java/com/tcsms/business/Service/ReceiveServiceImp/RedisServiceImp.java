@@ -1,5 +1,6 @@
 package com.tcsms.business.Service.ReceiveServiceImp;
 
+import com.tcsms.business.Exception.CustomizeException;
 import com.tcsms.business.Service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,18 @@ public class RedisServiceImp implements RedisService {
         } finally {
             jedis.close();
         }
+    }
+
+    public boolean checkVerificationCode(String phone, String verificationCode) throws Exception {
+        String value = getVerifyCode(phone);
+        if (value != null) {
+            if (value.equals(verificationCode)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        throw new CustomizeException("验证码可能已失效！请重发。");
     }
 
     public String getVerifyCode(String key) {

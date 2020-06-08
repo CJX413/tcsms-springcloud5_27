@@ -13,4 +13,5 @@ public interface UserDao extends CrudRepository<User, String> {
 
     @Query(value = "select * from user where user.role='ADMIN' LIMIT 1", nativeQuery = true)
     User getAdmin();
+
 }

@@ -23,7 +23,7 @@ public class UserInfo {
     @Column(name = "phoneNumber")
     private String phoneNumber;
     @Basic
-    @Column(name = "sex",nullable = false,columnDefinition = "varchar(255) default '男'")
+    @Column(name = "sex")
     private String sex="男";
 
     @Override

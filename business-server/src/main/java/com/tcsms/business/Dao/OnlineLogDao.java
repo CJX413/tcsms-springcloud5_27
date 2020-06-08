@@ -25,4 +25,7 @@ public interface OnlineLogDao extends JpaRepository<OnlineLog, Integer>, JpaSpec
             " where version in (select max(version) from online_log group by deviceId)", nativeQuery = true)
     List<Map<String, Object>> findAllLatestVersionJoinDeviceRegistry();
 
+    @Query(value = "select * from online_log where online_log.startTime like :date% order by startTime", nativeQuery = true)
+    List<OnlineLog> runningLogBar(@Param("date") String date);
+
 }

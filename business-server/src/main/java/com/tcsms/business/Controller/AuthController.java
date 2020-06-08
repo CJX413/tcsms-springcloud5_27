@@ -4,7 +4,6 @@ package com.tcsms.business.Controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.tcsms.business.Entity.User;
-import com.tcsms.business.Exception.CustomizeException;
 import com.tcsms.business.JSON.ResultJSON;
 import com.tcsms.business.Service.ReceiveServiceImp.EnvironmentServiceImp;
 import com.tcsms.business.Service.ReceiveServiceImp.RedisServiceImp;
@@ -50,7 +49,7 @@ public class AuthController {
             String invitationCode = jsonObject.get("invitationCode").getAsString();
             String pass = jsonObject.get("pass").getAsString();
             if (environmentServiceImp.checkInvitationCode(invitationCode) &&
-                    checkVerificationCode(phone, verificationCode)) {
+                    redisServiceImp.checkVerificationCode(phone, verificationCode)) {
                 User user = new User();
                 user.setUsername(phone);
                 user.setPassword(pass);
@@ -72,7 +71,7 @@ public class AuthController {
             String phone = jsonObject.get("phone").getAsString();
             String verificationCode = jsonObject.get("verificationCode").getAsString();
             String pass = jsonObject.get("pass").getAsString();
-            if (checkVerificationCode(phone, verificationCode)) {
+            if (redisServiceImp.checkVerificationCode(phone, verificationCode)) {
                 return userServiceImp.updatePassword(phone, pass).toString();
             }
             return new ResultJSON(200, false, "手机验证码或邀请码错误！", null).toString();
@@ -84,6 +83,7 @@ public class AuthController {
 
     /**
      * templateId:发送验证码的模板ID
+     *
      * @param json
      * @return
      */
@@ -93,23 +93,19 @@ public class AuthController {
         String phone = jsonObject.get("phone").getAsString();
         return txCloudSmsServiceImp.sendSmsVerifyCode(phone, TxCloudSmsServiceImp.REGISTER_TEMPLATE_ID).toString();
     }
+
     @RequestMapping(value = "/auth/resetPwdVerificationCode", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String resetPwdVerificationCode(@RequestBody String json) {
         JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
         String phone = jsonObject.get("phone").getAsString();
         return txCloudSmsServiceImp.sendSmsVerifyCode(phone, TxCloudSmsServiceImp.RESET_PWD_TEMPLATE_ID).toString();
     }
-    private boolean checkVerificationCode(String phone, String verificationCode) throws Exception {
-        String value = redisServiceImp.getVerifyCode(phone);
-        if (value != null) {
-            log.info(value + "---" + verificationCode);
-            if (value.equals(verificationCode)) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        throw new CustomizeException("验证码已失效！请重发。");
+
+    @RequestMapping(value = "/auth/updatePhoneVerificationCode", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public String updatePhoneVerificationCode(@RequestBody String json) {
+        JsonObject jsonObject = new Gson().fromJson(json, JsonObject.class);
+        String phone = jsonObject.get("phone").getAsString();
+        return txCloudSmsServiceImp.sendSmsVerifyCode(phone, TxCloudSmsServiceImp.UPDATE_PHONE_TEMPLATE_ID).toString();
     }
 
 }

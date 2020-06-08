@@ -30,7 +30,21 @@
       </el-table>
     </el-row>
     <el-row>
-      <v-charts :options="option" style="width: 600px;height: 400px"></v-charts>
+      <el-col :span="2">
+        <el-date-picker
+          :value-format="'yyyy-MM-dd'"
+          v-model="date"
+          size="mini"
+          type="date"
+          placeholder="选择日期">
+        </el-date-picker>
+      </el-col>
+      <el-col :span="1" :offset="3">
+        <el-button type="primary" size="mini" @click="sumbit">确定</el-button>
+      </el-col>
+    </el-row>
+    <el-row>
+      <v-charts :options="option" style="width: 800px;height: 400px"></v-charts>
     </el-row>
   </div>
 </template>
@@ -47,99 +61,84 @@
     components: {VCharts},
     data() {
       return {
+        workingData: {},
         geocoder: null,
-        option: null,
+        date: '',
+        option: {
+          title: {
+            textAlign: 'center',
+            x: 'center',
+            y: 'top',
+            text: '设备上线日志分析表',
+          },
+          tooltip: {
+            trigger: 'axis',
+          },
+          legend: {
+            data: []
+          },
+          grid: {
+            top: '10%',
+            left: '10%',
+            right: '10%',
+            bottom: '10%',
+            containLabel: true
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {}
+            }
+          },
+          xAxis: {
+            type: 'value',
+            min: 0,
+            axisLabel: {
+              formatter: (value, index) => {
+                let date = new Date(value) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                let Y = date.getFullYear() + '年'
+                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '月'
+                let D = date.getDate() + '日'
+                let h = '\n' + date.getHours() + '点'
+                let m = date.getMinutes() + '分'
+                let s = date.getSeconds() + '秒'
+                return Y + M + D + h + m + s
+              },
+            }
+          },
+          yAxis: {
+            type: 'category',
+          },
+          series: [
+            {
+              name: '辅助',
+              type: 'bar',
+              stack: '总量',
+              itemStyle: {
+                barBorderColor: 'rgba(0,0,0,0)',
+                color: 'rgba(0,0,0,0)'
+              },
+              emphasis: {
+                itemStyle: {
+                  barBorderColor: 'rgba(0,0,0,0)',
+                  color: 'rgba(0,0,0,0)'
+                }
+              },
+              data: []
+            },
+            {
+              name: '时间',
+              type: 'bar',
+              stack: '总量',
+              barWidth: 20,
+              label: {},
+              data: []
+            }
+          ],
+        },
       };
     },
     mounted() {
       this.initPage();
-      this.geocoder = new BMap.Geocoder();
-      let data = [{
-        name: "联调",
-        start: "2020-02-17",
-        end: "2020-02-23"
-      },
-        {
-          name: "测试",
-          start: "2020-02-24",
-          end: "2020-03-10"
-        },
-        {
-          name: "灰度",
-          start: "2020-02-29",
-          end: "2020-03-11"
-        },
-        {
-          name: "发布",
-          start: "2020-03-10",
-          end: "2020-03-12"
-        }
-      ];
-      let result = [];
-      for (let i = data.length - 1; i >= 0; i--) {
-        result.push(data[i]);
-      }
-      data = result;
-      this.option = {
-        title: {
-          text: '深圳月最低生活费组成（单位:元）',
-          subtext: 'From ExcelHome',
-          sublink: 'http://e.weibo.com/1341556070/AjQH99che'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-          },
-          formatter: function (params) {
-            var tar = params[1];
-            return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
-          }
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: {
-          type: 'category',
-          splitLine: {show: false},
-          data: ['总费用', '房租', '水电费', '交通费', '伙食费', '日用品数']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [
-          {
-            name: '辅助',
-            type: 'bar',
-            stack: '总量',
-            itemStyle: {
-              barBorderColor: 'rgba(0,0,0,0)',
-              color: 'rgba(0,0,0,0)'
-            },
-            emphasis: {
-              itemStyle: {
-                barBorderColor: 'rgba(0,0,0,0)',
-                color: 'rgba(0,0,0,0)'
-              }
-            },
-            data: [0, 1700, 1400, 1200, 300, 0]
-          },
-          {
-            name: '生活费',
-            type: 'bar',
-            stack: '总量',
-            label: {
-              show: true,
-              position: 'inside'
-            },
-            data: [2900, 1200, 300, 200, 900, 300]
-          }
-        ]
-      };
-
     },
     computed: {
       onlineLog() {
@@ -148,11 +147,10 @@
     },
     methods: {
       initPage() {
-        this.axios.post('/runningLog', {})
+        this.geocoder = new BMap.Geocoder();
+        this.axios.post('/onlineLog', {})
           .then((response) => {
-            console.log(response.data);
             if (response.data.success === true) {
-              console.log(response.data.result);
               let data = response.data.result;
               for (let i = 0; i < data.length; i++) {
                 let result = this.getAddress(data[i].coordinate);
@@ -163,19 +161,82 @@
               this.$store.state.onlineLog = data;
             }
           });
+        let date = this.$moment(new Date()).format('YYYY-MM-DD');
+        this.date = date;
+        this.axios.post('/onlineLogBar', {
+          date: date,
+        }).then((response) => {
+          if (response.data.success === true) {
+            let data = response.data.result;
+            this.workingData = data;
+            console.log(data);
+            let that = this;
+            this.option.series[1].label = {
+              show: true,
+              position: 'top',
+              formatter: function (params) {
+                console.log('++++++++++++++++++++++++++')
+                console.log(params)
+                return that.formatter(that.workingData.startTime[params.dataIndex])
+                  + '--' + that.formatter(that.workingData.startTime[params.dataIndex] + that.workingData.endTime[params.dataIndex]);
+              },
+            };
+            this.option.xAxis.min = data.startTime[0];
+            this.option.series[0].data = data.startTime;
+            this.option.series[1].data = data.endTime;
+          } else {
+            this.utils.alertErrorMessage('获取设备上线日志数据失败！', response.data.message);
+          }
+        });
       },
       coordinateFormatter(row, column) {
         return row.coordinate.lng + ',' + row.coordinate.lat;
       },
       async getAddress(coordinate) {
-        //let geocoder = new BMap.Geocoder();
         let point = new BMap.Point(coordinate.lng, coordinate.lat);
         return await new Promise((resolve, reject) => {
           this.geocoder.getLocation(point, function (rs) {
             resolve(rs.address);
-            console.log(rs.address)
           });
         });
+      },
+      formatter(value) {
+        let date = new Date(value) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        let h = date.getHours() + '点'
+        let m = date.getMinutes() + '分'
+        let s = date.getSeconds() + '秒'
+        return h + m + s
+      },
+      sumbit() {
+        if (this.date !== '') {
+          this.axios.post('/onlineLogBar', {
+            date: this.date,
+          }).then((response) => {
+            if (response.data.success === true) {
+              let data = response.data.result;
+              this.workingData = data;
+              console.log(data);
+              let that = this;
+              this.option.series[1].label = {
+                show: true,
+                position: 'top',
+                formatter: function (params) {
+                  console.log('++++++++++++++++++++++++++')
+                  console.log(params)
+                  return that.formatter(that.workingData.startTime[params.dataIndex])
+                    + '--' + that.formatter(that.workingData.startTime[params.dataIndex] + that.workingData.endTime[params.dataIndex]);
+                },
+              };
+              this.option.xAxis.min = data.startTime[0];
+              this.option.series[0].data = data.startTime;
+              this.option.series[1].data = data.endTime;
+            } else {
+              this.utils.alertErrorMessage('获取设备上线日志数据失败！', response.data.message);
+            }
+          });
+        } else {
+          this.$message.error('日期不能为空！');
+        }
       }
     }
   }

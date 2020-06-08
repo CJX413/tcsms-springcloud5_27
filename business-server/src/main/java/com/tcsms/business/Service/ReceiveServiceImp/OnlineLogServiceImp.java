@@ -6,11 +6,13 @@ import com.tcsms.business.Dao.DeviceRegistryDao;
 import com.tcsms.business.Dao.OnlineLogDao;
 import com.tcsms.business.Entity.DeviceRegistry;
 import com.tcsms.business.Entity.OnlineLog;
+import com.tcsms.business.Exception.CustomizeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class OnlineLogServiceImp {
@@ -42,6 +44,28 @@ public class OnlineLogServiceImp {
             return true;
         }
         return false;
+    }
+
+    public JsonObject runningLogBar(String date) throws Exception {
+        JsonObject jsonObject = new JsonObject();
+        List<OnlineLog> list = onlineLogDao.runningLogBar(date);
+        if (list == null || list.size() == 0) {
+            throw new CustomizeException("没有数据！");
+        }
+        JsonArray startTimeArray = new JsonArray();
+        JsonArray endTimeArray = new JsonArray();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (OnlineLog onlineLog : list) {
+            Date startTime = simpleDateFormat.parse(onlineLog.getStartTime());
+            Date endTime = simpleDateFormat.parse(onlineLog.getEndTime());
+            Long time1 = startTime.getTime();
+            Long time2 = endTime.getTime() - startTime.getTime();
+            startTimeArray.add(time1);
+            endTimeArray.add(time2);
+        }
+        jsonObject.add("startTime", startTimeArray);
+        jsonObject.add("endTime", endTimeArray);
+        return jsonObject;
     }
 
     private JsonObject formToJson(DeviceRegistry device, OnlineLog onlineLog) {
